@@ -1,0 +1,458 @@
+# Thesis: HANK × Climate Rare Disasters × Financial Amplification × Monetary Policy
+# Notes:
+# - "tools" includes both software tools (packages/frameworks) and core infrastructure utilities.
+# - "required_data" lists minimum viable inputs; "optional_data" supports richer validation/robustness.
+# - All paths assume repository root "thesis/".
+
+version: "1.0"
+project:
+  name: "Climate Rare Disasters, Inequality, and Financial Amplification in a Nonlinear HANK Model"
+  frequency: "quarterly"
+  geographies:
+    - "Euro Area (aggregate) as baseline"
+    - "Optional: selected EA countries for robustness"
+  deliverables_map:
+    D0: "Model spec (equations & blocks)"
+    D1: "Calibration + empirical targets sheet"
+    D2: "Baseline model solved (SS + IRFs)"
+    D3: "Banks / financial intermediary module"
+    D4: "Climate rare-disaster shock module"
+    D5: "Nonlinear experiments + policy rules"
+    D6: "Decomposition: inequality vs finance amplification"
+    D7: "Optional: NN surrogate + estimation"
+
+global_conventions:
+  config_paths:
+    params: "model/calibration/params.yaml"
+    targets: "model/calibration/targets.yaml"
+    experiments_registry: "model/experiments/registry.yaml"
+    models_registry: "docs/models_registry.yaml"
+  output_paths:
+    figures: "outputs/figures/"
+    tables: "outputs/tables/"
+    diagnostics: "outputs/diagnostics/"
+    logs: "outputs/logs/"
+  reproducibility:
+    seeds_module: "model/utils/seeds.py"
+    run_card_fields:
+      - "git_commit"
+      - "timestamp_utc"
+      - "params_hash"
+      - "targets_hash"
+      - "model_id"
+      - "experiment_id"
+      - "python_version"
+      - "package_versions"
+      - "device_cpu_gpu"
+  core_tools:
+    languages:
+      - "Python (>=3.11)"
+    environment:
+      - "conda/mamba"
+      - "pip-tools (optional alternative pinning)"
+    devops:
+      - "git"
+      - "Makefile"
+      - "pytest"
+      - "pre-commit (optional)"
+    data_stack:
+      - "pandas"
+      - "numpy"
+      - "pyarrow"
+      - "requests"
+    plotting:
+      - "matplotlib"
+      - "plotly (optional for dashboards)"
+    documentation:
+      - "LaTeX (Overleaf + local build via latexmk)"
+    macro_modeling:
+      - "econpizza (HANK solution + AD utilities)"
+      - "jax (AD + acceleration; optional if not fully using econpizza internals)"
+    estimation_optional:
+      - "scipy.optimize"
+      - "statsmodels"
+    ml_optional:
+      - "pytorch OR jax/flax (choose one for D7)"
+
+models:
+  - id: "M0_data_targets"
+    name: "Data & Targets Layer"
+    purpose: >
+      Build reproducible datasets and compute calibration/validation targets (moments, elasticities,
+      IRF magnitudes, initial-state measures such as leverage and spreads). Provides disciplined inputs
+      for all structural models and defines scenario initial conditions.
+    related_topics:
+      - "Empirical Anchors & Validation Targets"
+      - "Monetary Transmission"
+      - "Macro-Finance"
+      - "Climate measurement (disaster series construction)"
+    deliverables_supported: ["D1", "D5", "D6"]
+    code_paths:
+      scripts:
+        - "scripts/01_download_data.py"
+        - "scripts/02_build_panel.py"
+        - "scripts/03_compute_targets.py"
+      outputs:
+        - "outputs/tables/targets_table.csv"
+        - "data/metadata/manifest.csv"
+        - "data/metadata/variable_dictionary.csv"
+    literature:
+      - title: "Jordà, Schularick, Taylor (2013)"
+        explanation: "leverage/credit cycle facts used as state variables and validation targets"
+        paper_id: "jst_2013_when_credit_bites_back"
+      - title: "García-Posada & Paz (2024)"
+        explanation: "euro-area bank lending channel targets (credit standards tightening after MP shocks)"
+        paper_id: "garcia_posada_paz_2024_credit_supply"
+      - title: "Ottonello & Winberry (2018)"
+        explanation: "investment channel facts by financial risk (targets for finance validation)"
+        paper_id: "ottonello_winberry_2018_investment_channel"
+    required_data:
+      macro:
+        - source: "Eurostat"
+          series:
+            [
+              "real GDP",
+              "consumption",
+              "investment",
+              "employment/unemployment",
+              "HICP/core",
+            ]
+      monetary:
+        - source: "ECB SDW"
+          series:
+            [
+              "policy rates (DFR/MRO/€STR)",
+              "MIR lending/deposit rates",
+              "BSI credit aggregates",
+            ]
+      leverage:
+        - source: "BIS credit statistics"
+          series: ["private credit-to-GDP", "credit growth"]
+      climate_disasters:
+        - source: "EM-DAT (CRED) OR national disaster database"
+          series: ["disaster occurrence", "damage proxies", "event types"]
+        - source: "Copernicus/ERA5"
+          series:
+            ["temperature", "precipitation", "extreme indicators (optional)"]
+      finance_spreads:
+        - source: "aggregate EUR corporate spread index"
+          series: ["IG spread", "HY spread (optional)"]
+    optional_data:
+      monetary_shocks:
+        - source: "High-frequency ECB monetary surprises (event-study datasets)"
+          series: ["MP surprise series around announcement windows"]
+      banking_micro:
+        - source: "ECB Bank Lending Survey (BLS)"
+          series: ["credit standards", "credit demand", "SME vs large firms"]
+        - source: "EBA Transparency OR BankFocus"
+          series: ["bank capital ratios", "balance-sheet items"]
+      energy_prices:
+        - source: "Market data (Brent/TTF/electricity/EU ETS)"
+          series: ["energy prices", "carbon price"]
+
+  - id: "M1_rank_nk_baseline"
+    name: "RANK New Keynesian Baseline (Benchmark NK)"
+    purpose: >
+      Provide a clean representative-agent NK benchmark for monetary transmission and policy-rule
+      comparisons. Serves as sanity check for signs/magnitudes and a reference point for what changes
+      once heterogeneity and finance are introduced.
+    related_topics:
+      - "Monetary Policy"
+      - "New Keynesian baseline"
+      - "Policy rules"
+    deliverables_supported: ["D0", "D2", "D5"]
+    literature:
+      - title: "Clarida, Galí, Gertler (1999)"
+        explanation: "baseline NK monetary policy / Taylor-rule logic"
+        paper_id: "clarida_gali_gertler_1999"
+      - title: "Woodford (2003)"
+        explanation: "NK framework and policy trade-offs (benchmark policy evaluation language)"
+        paper_id: "woodford_2003_interest_and_prices"
+    blocks:
+      - "household (representative agent)"
+      - "firms + NKPC (or simplified Phillips curve)"
+      - "monetary policy rule (Taylor)"
+      - "market clearing"
+    required_data:
+      - source: "Eurostat"
+        series:
+          [
+            "GDP",
+            "HICP/core",
+            "consumption/investment (for steady-state scaling)",
+          ]
+      - source: "ECB SDW"
+        series: ["policy rate series (for rule calibration baseline)"]
+    optional_data:
+      - source: "High-frequency monetary policy surprises"
+        series: ["benchmark IRF magnitude validation"]
+
+  - id: "M2_rank_climate_disasters"
+    name: "RANK + Climate Rare-Disaster Module (Benchmark Climate NK)"
+    purpose: >
+      Introduce disaster risk vs disaster realization in a parsimonious RA NK setting. Provides the
+      benchmark climate inflation-output trade-off and isolates purely aggregate channels before adding
+      household heterogeneity and banking amplification.
+    related_topics:
+      - "Climate Tail Risk & Rare Disasters"
+      - "Monetary policy trade-offs under supply shocks"
+      - "Nonlinearities (disaster states)"
+    deliverables_supported: ["D0", "D4", "D5"]
+    literature:
+      - title: "Kara & Thakoor (2023)"
+        explanation: "NK model with recurrent climate shocks; benchmark climate trade-off"
+        paper_id: "kara_thakoor_2023_climate_shocks"
+      - title: "Cantelmo (2022)"
+        explanation: "rare disasters, r* effects, and monetary policy implications"
+        paper_id: "cantelmo_2022_rare_disasters"
+      - title: "Fernández-Villaverde & Levintal (2018)"
+        explanation: "why disaster states require robust (often nonlinear/global) solution methods"
+        paper_id: "fv_levintal_2018_rare_disaster_methods"
+    blocks:
+      - "RANK NK core (M1)"
+      - "disaster state process (risk + realization)"
+      - "disaster mapping to TFP/capital/markup/energy wedge (choose parsimonious mapping)"
+    required_data:
+      - source: "EM-DAT (CRED) OR hazard proxy"
+        series: ["disaster event intensity/frequency measures"]
+      - source: "Copernicus/ERA5 (optional if building hazard indices)"
+        series: ["temperature/extreme indicators"]
+      - source: "Eurostat + ECB SDW"
+        series: ["GDP", "inflation", "policy rate"]
+    optional_data:
+      - source: "Energy prices"
+        series: ["Brent", "TTF gas", "electricity", "EU ETS"]
+
+  - id: "M3_hank_monetary_baseline"
+    name: "HANK Monetary Baseline (Core Household Block)"
+    purpose: >
+      Implement and validate the heterogeneous-household block and HANK monetary transmission (MPCs,
+      wealth distribution, income channel). This is the base to which banks and disasters will be added.
+    related_topics:
+      - "HANK Foundations"
+      - "Inequality / MPC dispersion"
+      - "Monetary transmission in heterogeneous-agent economies"
+    deliverables_supported: ["D0", "D1", "D2", "D6"]
+    literature:
+      - title: "Kaplan, Moll, Violante (2018)"
+        explanation: "core HANK monetary transmission result and decomposition intuition"
+        paper_id: "kaplan_moll_violante_2018"
+      - title: "Auclert (2019)"
+        explanation: "redistribution channel framework (how policy moves welfare/consumption across households)"
+        paper_id: "auclert_2019_redistribution"
+      - title: "Kaplan, Violante, Weidner (2014)"
+        explanation: "wealthy hand-to-mouth facts used for heterogeneity calibration"
+        paper_id: "kaplan_violante_weidner_2014_h2m"
+    blocks:
+      - "households: idiosyncratic income risk + borrowing constraint (as chosen)"
+      - "aggregation: distribution dynamics"
+      - "goods market clearing"
+      - "monetary policy rule (Taylor) + basic shocks"
+    required_data:
+      - source: "HFCS (preferred) OR published moments"
+        series:
+          ["wealth distribution (liquid/illiquid)", "debt", "asset holdings"]
+      - source: "EU-SILC OR published moments"
+        series: ["income distribution", "earnings risk proxies"]
+      - source: "Eurostat"
+        series:
+          [
+            "GDP, C, I for scaling/validation",
+            "HICP/core inflation if NK block included",
+          ]
+    optional_data:
+      - source: "micro MPC estimates (literature)"
+        series: ["MPC by wealth/liquidity bins"]
+
+  - id: "M4_hank_banks"
+    name: "HANK + Banks / Financial Intermediation (Macro-Finance Core)"
+    purpose: >
+      Add intermediary net worth/leverage constraints (or a disciplined spread wedge) to generate spreads
+      and credit tightening. Validate a bank-lending channel and create leverage-dependent amplification
+      under monetary shocks.
+    related_topics:
+      - "Financial Intermediation"
+      - "Macro-Finance amplification"
+      - "Monetary-to-credit transmission"
+      - "Empirical Anchors (bank lending channel)"
+    deliverables_supported: ["D0", "D1", "D3", "D5", "D6"]
+    literature:
+      - title: "Fernández-Villaverde, Hurtado, Nuño (2023)"
+        explanation: "heterogeneity + financial frictions generating amplification/state dependence"
+        paper_id: "fv_hurtado_nuno_2023_ff_wealth"
+      - title: "Gertler & Karadi (2011)"
+        explanation: "intermediary net-worth constraint and spread dynamics (bank block template)"
+        paper_id: "gertler_karadi_2011_ump"
+      - title: "Bernanke, Gertler, Gilchrist (1999)"
+        explanation: "financial accelerator mechanism (fallback reduced-form wedge if needed)"
+        paper_id: "bgg_1999_financial_accelerator"
+      - title: "García-Posada & Paz (2024)"
+        explanation: "bank lending channel evidence in the euro area"
+        paper_id: "garcia_posada_paz_2024_credit_supply"
+    blocks:
+      - "HANK core (M3)"
+      - "intermediary/bank net worth dynamics"
+      - "leverage or incentive constraint"
+      - "spread mapping to borrowing/lending rates + credit supply wedge"
+    required_data:
+      - source: "ECB MIR + BSI"
+        series: ["lending rates", "deposit rates", "credit volumes"]
+      - source: "BIS"
+        series: ["credit-to-GDP", "leverage state proxies"]
+      - source: "EUR corporate spread index"
+        series: ["IG spread (minimum)"]
+    optional_data:
+      - source: "ECB Bank Lending Survey (BLS)"
+        series: ["credit standards", "SME vs large"]
+      - source: "EBA Transparency OR BankFocus"
+        series: ["capital ratios", "bank balance sheets"]
+      - source: "high-frequency MP surprises"
+        series: ["shock series for validation"]
+
+  - id: "M5_hank_climate_disasters"
+    name: "HANK + Climate Rare Disasters (Heterogeneity × Tail Risk)"
+    purpose: >
+      Quantify how disaster risk and realizations propagate through the household distribution absent
+      banking amplification. Isolates the inequality/MPC amplifier and provides a clean comparison to
+      the full model.
+    related_topics:
+      - "Climate Tail Risk & Rare Disasters"
+      - "HANK distributional dynamics"
+      - "Precautionary saving and state dependence"
+    deliverables_supported: ["D0", "D4", "D5", "D6"]
+    literature:
+      - title: "Cantelmo (2022)"
+        explanation: "rare-disaster risk vs realization, r* and monetary policy logic"
+        paper_id: "cantelmo_2022_rare_disasters"
+      - title: "Kara & Thakoor (2023)"
+        explanation: "climate shock benchmark, used to show “what changes under HANK”"
+        paper_id: "kara_thakoor_2023_climate_shocks"
+      - title: "Kaplan, Moll, Violante (2018)"
+        explanation: "distributional/MPC channel to interpret disaster propagation in HANK"
+        paper_id: "kaplan_moll_violante_2018"
+    blocks:
+      - "HANK core (M3)"
+      - "disaster state process (risk + realization)"
+      - "disaster mapping to income/TFP/capital destruction/price wedge (parsimonious)"
+    required_data:
+      - source: "EM-DAT (CRED) OR hazard proxy"
+        series: ["disaster frequency/intensity calibration targets"]
+      - source: "HFCS/EU-SILC OR published moments"
+        series: ["heterogeneity targets as in M3"]
+      - source: "Eurostat + ECB SDW"
+        series: ["GDP", "inflation", "policy rate (for experiments)"]
+    optional_data:
+      - source: "ERA5/Copernicus extremes"
+        series: ["heat days, precipitation extremes (for hazard index)"]
+      - source: "energy prices"
+        series: ["oil/gas/electricity for inflation wedge mapping"]
+
+  - id: "M6_full_hank_banks_climate"
+    name: "HANK + Banks + Climate Rare Disasters (Full Thesis Model)"
+    purpose: >
+      Unified nonlinear framework delivering the main contribution: double amplification (inequality ×
+      finance), state dependence across initial financial conditions, and monetary policy rule evaluation
+      under disaster risk and realization.
+    related_topics:
+      - "Monetary Policy in HANK"
+      - "Financial amplification and spreads"
+      - "Climate tail risk"
+      - "Nonlinear policy evaluation"
+      - "Decomposition (inequality vs finance)"
+    deliverables_supported: ["D0", "D1", "D2", "D3", "D4", "D5", "D6"]
+    literature:
+      - title: "Fernández-Villaverde, Hurtado, Nuño (2023)"
+        explanation: "closest “double amplification” reference (heterogeneity + finance)"
+        paper_id: "fv_hurtado_nuno_2023_ff_wealth"
+      - title: "Kaplan, Moll, Violante (2018)"
+        explanation: "HANK transmission backbone"
+        paper_id: "kaplan_moll_violante_2018"
+      - title: "Gertler & Karadi (2011)"
+        explanation: "banking amplification / spreads mechanism"
+        paper_id: "gertler_karadi_2011_ump"
+      - title: "Cantelmo (2022)"
+        explanation: "disaster/climate shock structure"
+        paper_id: "cantelmo_2022_rare_disasters"
+      - title: "Kara & Thakoor (2023)"
+        explanation: "monetary trade-off benchmarks"
+        paper_id: "kara_thakoor_2023_climate_shocks"
+      - title: "Boehl (2024)"
+        explanation: "robust nonlinear HANK solution with AD (implementation backbone)"
+        paper_id: "boehl_2024_hank_on_speed"
+      - title: "Auclert et al. (2021)"
+        explanation: "sequence-space Jacobian benchmark for solution/estimation checks"
+        paper_id: "auclert_et_al_2021_ssj"
+    blocks:
+      - "HANK core (M3)"
+      - "banks/intermediation (M4)"
+      - "disaster module (M5/M2)"
+      - "policy rules menu (Taylor variants)"
+      - "experiment registry for state dependence (high/low leverage, risk/realization)"
+    required_data:
+      macro_and_policy:
+        - source: "Eurostat + ECB SDW"
+          series: ["GDP/C/I", "HICP/core", "policy rates"]
+      heterogeneity:
+        - source: "HFCS/EU-SILC OR published moments"
+          series: ["wealth/income distribution targets"]
+      finance:
+        - source: "BIS + ECB MIR/BSI"
+          series: ["credit-to-GDP", "lending/deposit rates", "credit volumes"]
+        - source: "EUR corporate spread index"
+          series: ["spreads"]
+      climate:
+        - source: "EM-DAT (CRED) OR hazard proxy"
+          series: ["disaster frequency/intensity"]
+    optional_data:
+      - source: "ECB BLS + bank capital"
+        series: ["credit standards", "capital ratios"]
+      - source: "high-frequency MP surprises"
+        series: ["MP shock series"]
+      - source: "energy prices"
+        series: ["oil/gas/electricity/ETS"]
+
+  - id: "M7_decomposition_suite"
+    name: "Decomposition / Counterfactual Suite (Inequality vs Finance vs Interaction)"
+    purpose: >
+      Systematically quantify contributions of (i) household heterogeneity (inequality/MPC channel),
+      (ii) financial intermediation (spread/credit channel), and (iii) their interaction. Implement
+      controlled counterfactuals by shutting down channels or swapping representative vs heterogeneous
+      agents while holding shocks/policy fixed.
+    related_topics:
+      - "Decomposition methods"
+      - "Channel attribution"
+      - "Policy comparisons under state dependence"
+    deliverables_supported: ["D6", "D5"]
+    literature:
+      - title: "Auclert (2019)"
+        explanation: "decomposition language for distributional channels (redistribution vs intertemporal substitution)"
+        paper_id: "auclert_2019_redistribution"
+      - title: "Bernanke, Gertler, Gilchrist (1999)"
+        explanation: "classic amplification framing for “finance-only” counterfactuals"
+        paper_id: "bgg_1999_financial_accelerator"
+      - title: "Kaplan, Moll, Violante (2018)"
+        explanation: "HANK vs RANK counterfactual logic for “heterogeneity-only” comparisons"
+        paper_id: "kaplan_moll_violante_2018"
+      - title: "Bianchi & Melosi (2017)"
+        explanation: "state dependence/regime logic motivating “bad state ≠ scaled-up normal state”"
+        paper_id: "bianchi_melosi_2017_escaping"
+    variants:
+      - id: "M7A_full"
+        description: "Full model (M6)"
+        channel_switches: { heterogeneity: "on", banks: "on", disasters: "on" }
+      - id: "M7B_no_banks"
+        description: "HANK + disasters, spreads fixed/neutralized"
+        channel_switches: { heterogeneity: "on", banks: "off", disasters: "on" }
+      - id: "M7C_rank_with_banks"
+        description: "RANK + banks + disasters (heterogeneity removed)"
+        channel_switches: { heterogeneity: "off", banks: "on", disasters: "on" }
+      - id: "M7D_rank_no_banks"
+        description: "RANK + disasters only (pure aggregate benchmark)"
+        channel_switches:
+          { heterogeneity: "off", banks: "off", disasters: "on" }
+      - id: "M7E_risk_vs_realization"
+        description: "Risk shock only vs realization shock only comparisons"
+        channel_switches:
+          { heterogeneity: "on", banks: "on", disasters: "risk_or_realization" }
+    required_data:
+      - "Same as M6 (use identical targets and shock calibration for comparability)"

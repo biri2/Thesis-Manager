@@ -1,0 +1,132 @@
+[
+  {
+    "id": "macro_aggregates",
+    "name": "Macro aggregates + inflation",
+    "source": "Eurostat: GDP, C, I, labor, HICP/core",
+    "topic": "Macroeconomics",
+    "requirements": {
+      "M0": "req", "M1": "req", "M2": "req", "M3": "req",
+      "M4": "req", "M5": "req", "M6": "req", "M7": "req"
+    }
+  },
+  {
+    "id": "policy_rates",
+    "name": "Policy rates / short rate",
+    "source": "ECB SDW: DFR/MRO/€STR",
+    "topic": "Monetary Policy",
+    "requirements": {
+      "M0": "req", "M1": "req", "M2": "req", "M3": "req",
+      "M4": "req", "M5": "req", "M6": "req", "M7": "req"
+    }
+  },
+  {
+    "id": "bank_lending",
+    "name": "Bank lending & deposit rates + credit aggregates",
+    "source": "ECB MIR/BSI",
+    "topic": "Banking & Credit",
+    "requirements": {
+      "M0": "req", "M1": "no", "M2": "opt", "M3": "opt",
+      "M4": "req", "M5": "opt", "M6": "req", "M7": "req"
+    }
+  },
+  {
+    "id": "credit_leverage",
+    "name": "Credit/leverage state variables",
+    "source": "BIS: credit-to-GDP, credit growth",
+    "topic": "Banking & Credit",
+    "requirements": {
+      "M0": "req", "M1": "no", "M2": "opt", "M3": "no",
+      "M4": "req", "M5": "no", "M6": "req", "M7": "req"
+    }
+  },
+  {
+    "id": "corp_spreads",
+    "name": "Corporate spreads / market-based risk",
+    "source": "EUR IG/HY spread index",
+    "topic": "Financial Markets",
+    "requirements": {
+      "M0": "req", "M1": "no", "M2": "opt", "M3": "no",
+      "M4": "req", "M5": "no", "M6": "req", "M7": "req"
+    }
+  },
+  {
+    "id": "disaster_events",
+    "name": "Disaster events / damages",
+    "source": "EM-DAT or equivalent disaster database",
+    "topic": "Climate & Disasters",
+    "requirements": {
+      "M0": "req", "M1": "no", "M2": "req", "M3": "no",
+      "M4": "no", "M5": "req", "M6": "req", "M7": "req"
+    }
+  },
+  {
+    "id": "climate_intensity",
+    "name": "Climate intensity / extremes",
+    "source": "Copernicus/ERA5 or E-OBS",
+    "topic": "Climate & Disasters",
+    "requirements": {
+      "M0": "req", "M1": "no", "M2": "opt", "M3": "no",
+      "M4": "no", "M5": "opt", "M6": "opt", "M7": "opt"
+    }
+  },
+  {
+    "id": "wealth_dist",
+    "name": "Household wealth distribution",
+    "source": "HFCS (or published HANK moments)",
+    "topic": "Inequality",
+    "requirements": {
+      "M0": "opt", "M1": "no", "M2": "no", "M3": "req",
+      "M4": "req", "M5": "req", "M6": "req", "M7": "req"
+    }
+  },
+  {
+    "id": "income_dist",
+    "name": "Household income distribution / inequality",
+    "source": "EU-SILC (or published moments)",
+    "topic": "Inequality",
+    "requirements": {
+      "M0": "opt", "M1": "no", "M2": "no", "M3": "req",
+      "M4": "req", "M5": "req", "M6": "req", "M7": "req"
+    }
+  },
+  {
+    "id": "bank_bls",
+    "name": "Bank lending standards",
+    "source": "ECB Bank Lending Survey (BLS)",
+    "topic": "Banking & Credit",
+    "requirements": {
+      "M0": "opt", "M1": "no", "M2": "no", "M3": "no",
+      "M4": "opt", "M5": "no", "M6": "opt", "M7": "opt"
+    }
+  },
+  {
+    "id": "bank_cap",
+    "name": "Bank capitalization / balance sheets",
+    "source": "EBA Transparency / BankFocus",
+    "topic": "Banking & Credit",
+    "requirements": {
+      "M0": "opt", "M1": "no", "M2": "no", "M3": "no",
+      "M4": "opt", "M5": "no", "M6": "opt", "M7": "opt"
+    }
+  },
+  {
+    "id": "mp_surprises",
+    "name": "High-frequency monetary policy surprises",
+    "source": "Event-study shocks around ECB announcements",
+    "topic": "Monetary Policy",
+    "requirements": {
+      "M0": "opt", "M1": "opt", "M2": "opt", "M3": "opt",
+      "M4": "opt", "M5": "opt", "M6": "opt", "M7": "opt"
+    }
+  },
+  {
+    "id": "energy_prices",
+    "name": "Energy prices / carbon price",
+    "source": "Brent, TTF, electricity, EU ETS",
+    "topic": "Financial Markets",
+    "requirements": {
+      "M0": "opt", "M1": "no", "M2": "opt", "M3": "no",
+      "M4": "no", "M5": "opt", "M6": "opt", "M7": "opt"
+    }
+  }
+]

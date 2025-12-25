@@ -1,0 +1,482 @@
+{% extends "base.html" %}
+
+{% block title %}Models Registry | Thesis Manager{% endblock %}
+
+{% block content %}
+<div class="models-container">
+    <div class="header-section" style="margin-bottom: 40px;">
+        <h2>Models Registry</h2>
+        <p style="color: var(--text-muted);">Unified framework for Climate Rare Disasters, Inequality, and Financial Amplification.</p>
+    </div>
+
+    <!-- Progress Matrix Section -->
+    <div class="matrix-section">
+        <div class="matrix-header">
+            <h3 class="matrix-title">Progress Matrix — Models × Deliverables</h3>
+            <p class="matrix-subtitle">Quick view of what each model contributes at each deliverable milestone. Hover over a cell for a short definition.</p>
+            
+            <div class="matrix-legend">
+                <span class="pill"><span class="swatch s"></span><b>S</b> Specified (D0)</span>
+                <span class="pill"><span class="swatch t"></span><b>T</b> Targets/calibration wired (D1)</span>
+                <span class="pill"><span class="swatch sol"></span><b>Sol</b> Solved (SS + IRFs) (D2–D4)</span>
+                <span class="pill"><span class="swatch int"></span><b>Int</b> Integrated into larger system</span>
+                <span class="pill"><span class="swatch exp"></span><b>Exp</b> Experiment grid run (D5)</span>
+                <span class="pill"><span class="swatch dec"></span><b>Dec</b> Used in decomposition accounting (D6)</span>
+                <span class="pill"><span class="swatch"></span><b>—</b> Not needed at this stage</span>
+            </div>
+        </div>
+
+        <div class="card matrix-card">
+            <div class="table-wrap" role="region" aria-label="Progress table" tabindex="0">
+                <table class="progress-matrix-table">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>D0<br><span>Spec</span></th>
+                            <th>D1<br><span>Calib</span></th>
+                            <th>D2<br><span>Baseline</span></th>
+                            <th>D3<br><span>Banks</span></th>
+                            <th>D4<br><span>Disasters</span></th>
+                            <th>D5<br><span>Exp</span></th>
+                            <th>D6<br><span>Decomp</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>M0 Data & Targets<span class="note">datasets + moments + initial states</span></td>
+                            <td><span class="tag s" title="Specified: data sources + moments definitions">S</span></td>
+                            <td><span class="tag t" title="Targets computed and exported (tables + manifest)">T</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag int" title="Integrated: provides inputs for experiments">Int</span></td>
+                            <td><span class="tag int" title="Integrated: provides inputs for decomposition metrics">Int</span></td>
+                        </tr>
+                        <tr>
+                            <td>M1 RANK NK baseline<span class="note">benchmark monetary NK</span></td>
+                            <td><span class="tag s" title="Specified: NK block + policy rule">S</span></td>
+                            <td><span class="tag t" title="Calibration wired to macro targets">T</span></td>
+                            <td><span class="tag sol" title="Solved: steady state + baseline IRFs">Sol</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag exp" title="Used as benchmark for policy experiments">Exp</span></td>
+                            <td><span class="tag dec" title="Used as RANK benchmark arm in decomposition">Dec</span></td>
+                        </tr>
+                        <tr>
+                            <td>M2 RANK + Disasters<span class="note">benchmark climate NK</span></td>
+                            <td><span class="tag s" title="Specified: disaster process + mapping">S</span></td>
+                            <td><span class="tag t" title="Disaster calibration targets wired">T</span></td>
+                            <td><span class="tag none" title="Optional at D2 (can solve later)">—</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag sol" title="Solved: risk vs realization in RANK benchmark">Sol</span></td>
+                            <td><span class="tag exp" title="Used as benchmark in climate experiments">Exp</span></td>
+                            <td><span class="tag dec" title="Used as RANK+disaster arm in decomposition">Dec</span></td>
+                        </tr>
+                        <tr>
+                            <td>M3 HANK baseline<span class="note">core heterogeneity block</span></td>
+                            <td><span class="tag s" title="Specified: household heterogeneity + aggregation">S</span></td>
+                            <td><span class="tag t" title="HANK targets wired (wealth/MPC moments)">T</span></td>
+                            <td><span class="tag sol" title="Solved: SS + monetary IRFs + distribution outputs">Sol</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag exp" title="Used for baseline comparisons">Exp</span></td>
+                            <td><span class="tag dec" title="Used as heterogeneity baseline in decomposition">Dec</span></td>
+                        </tr>
+                        <tr>
+                            <td>M4 HANK + Banks<span class="note">finance amplification channel</span></td>
+                            <td><span class="tag s" title="Specified: bank net worth/leverage + spreads">S</span></td>
+                            <td><span class="tag t" title="Bank targets wired (spreads/credit moments)">T</span></td>
+                            <td><span class="tag none" title="Builds on M3; not a separate D2 milestone">—</span></td>
+                            <td><span class="tag sol" title="Solved: bank block integrated + validated IRFs">Sol</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag exp" title="Used for finance-only comparisons">Exp</span></td>
+                            <td><span class="tag dec" title="Used as finance channel arm in decomposition">Dec</span></td>
+                        </tr>
+                        <tr>
+                            <td>M5 HANK + Disasters<span class="note">heterogeneity × tail risk (no banks)</span></td>
+                            <td><span class="tag s" title="Specified: disaster process inside HANK">S</span></td>
+                            <td><span class="tag t" title="Disaster + HANK targets wired">T</span></td>
+                            <td><span class="tag none" title="Optional at D2 (can solve at D4)">—</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag sol" title="Solved: risk vs realization in HANK without banks">Sol</span></td>
+                            <td><span class="tag exp" title="Used for heterogeneity×disaster comparisons">Exp</span></td>
+                            <td><span class="tag dec" title="Used as 'no banks' counterfactual arm">Dec</span></td>
+                        </tr>
+                        <tr>
+                            <td>M6 Full: HANK + Banks + Disasters<span class="note">core thesis engine</span></td>
+                            <td><span class="tag s" title="Specified: full integration of blocks">S</span></td>
+                            <td><span class="tag t" title="Full calibration wired">T</span></td>
+                            <td><span class="tag int" title="Integrated scaffold (baseline solution exists via M3)">Int</span></td>
+                            <td><span class="tag int" title="Integrated bank block into full environment">Int</span></td>
+                            <td><span class="tag int" title="Integrated disaster block into full environment">Int</span></td>
+                            <td><span class="tag exp" title="Core: full experiment grid + policy rules">Exp</span></td>
+                            <td><span class="tag dec" title="Benchmark full model in decomposition">Dec</span></td>
+                        </tr>
+                        <tr>
+                            <td>M7 Decomposition Suite<span class="note">counterfactual accounting</span></td>
+                            <td><span class="tag s" title="Specified: channel switch counterfactuals">S</span></td>
+                            <td><span class="tag t" title="Uses same calibration/targets as M6">T</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag none" title="Not needed">—</span></td>
+                            <td><span class="tag int" title="Integrated: consumes M6 experiment outputs">Int</span></td>
+                            <td><span class="tag dec" title="Final: decomposition tables/figures produced">Dec</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="matrix-footer">
+                <i class="ph ph-info"></i>
+                <span><b>Suggested workflow:</b> lock D0→D1 early, then make M1+M3 work end-to-end (D2), add banks (D3), add disasters (D4), run the full grid (D5), and only then freeze counterfactual definitions to compute decomposition (D6).</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Models Timeline Sequence -->
+    <div id="models-timeline" class="models-timeline"></div>
+
+    <!-- Models Grid -->
+    <div id="models-grid" class="models-grid">
+        <div class="loading">Loading model layers...</div>
+    </div>
+</div>
+
+<style>
+    .models-container {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .models-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+    .model-card {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        height: 100%;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid var(--card-border);
+        cursor: pointer;
+    }
+    .model-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        border-color: var(--accent-primary);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
+                    0 0 20px rgba(var(--accent-primary-rgb), 0.2);
+        background: rgba(255, 255, 255, 0.05);
+    }
+    /* Models Timeline Styles - 2 Rows */
+    .models-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--card-border);
+        border-radius: 24px;
+        margin-bottom: 50px;
+        position: relative;
+    }
+
+    .timeline-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        position: relative;
+    }
+
+    .timeline-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+        z-index: 2;
+        width: 20%;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+    }
+
+    .timeline-node:hover {
+        transform: translateY(-5px);
+    }
+
+    .node-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 2px solid var(--card-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        font-weight: 800;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        transition: all 0.3s;
+        box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .timeline-node:hover .node-circle {
+        border-color: var(--accent-primary);
+        color: var(--accent-primary);
+        box-shadow: 0 0 20px rgba(var(--accent-primary-rgb), 0.3);
+    }
+
+    .node-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-align: center;
+        transition: color 0.3s;
+    }
+
+    .timeline-node:hover .node-label {
+        color: var(--text-main);
+    }
+
+    /* Connecting Lines & Arrows - REMOVED */
+
+    .info-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .info-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        color: var(--text-faint);
+        font-weight: 700;
+        letter-spacing: 0.05em;
+    }
+    
+    /* Collapsible Data Section */
+    .data-collapsible {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .data-trigger {
+        width: 100%;
+        padding: 12px 16px;
+        background: none;
+        border: none;
+        color: var(--text-main);
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .data-trigger:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    .data-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        padding: 0 16px;
+    }
+    .data-content.active {
+        max-height: 1000px;
+        padding: 12px 16px;
+        border-top: 1px solid var(--card-border);
+    }
+    .data-trigger i {
+        transition: transform 0.3s;
+    }
+    .data-trigger.active i {
+        transform: rotate(180deg);
+    }
+
+    .topic-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    /* Improved Related Topics */
+    .topic-badge {
+        font-size: 0.8rem;
+        padding: 6px 14px;
+        background: linear-gradient(135deg, rgba(var(--accent-primary-rgb, 59, 130, 246), 0.1) 0%, rgba(var(--accent-primary-rgb, 59, 130, 246), 0.05) 100%);
+        border: 1px solid rgba(var(--accent-primary-rgb, 59, 130, 246), 0.2);
+        border-radius: 99px;
+        color: var(--text-main);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+    .topic-badge:hover {
+        border-color: var(--accent-primary);
+        background: rgba(var(--accent-primary-rgb, 59, 130, 246), 0.15);
+        transform: scale(1.05);
+    }
+
+    /* Deliverables Grid */
+    .deliv-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 10px;
+    }
+
+    .deliv-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+
+    .deliv-item:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: var(--accent-progress);
+        transform: translateX(4px);
+    }
+
+    .deliv-id {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--accent-progress);
+        background: rgba(var(--accent-progress-rgb, 16, 185, 129), 0.1);
+        padding: 2px 6px;
+        border-radius: 4px;
+        flex-shrink: 0;
+    }
+
+    .deliv-name {
+        font-size: 0.8rem;
+        color: var(--text-main);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Literature Section Styles */
+    .literature-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .literature-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .literature-item:hover {
+        border-color: rgba(var(--accent-primary-rgb), 0.3);
+        background: rgba(0, 0, 0, 0.25);
+    }
+
+    .literature-item i {
+        color: var(--accent-primary);
+        font-size: 1.1rem;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+    .lit-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .lit-link {
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .lit-link:hover {
+        opacity: 0.8;
+    }
+
+    .lit-brief {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+    .topic-badge i {
+        color: var(--accent-primary);
+        font-size: 0.9rem;
+    }
+
+    .path-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .path-item {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 4px;
+    }
+    .path-item i { font-size: 0.7rem; color: var(--accent-primary); }
+    
+    .data-group {
+        background: rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
+    .data-source {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 4px;
+    }
+    .data-series {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        font-style: italic;
+    }
+    .variant-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--card-border);
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+    .variant-id {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--accent-primary);
+        font-weight: 700;
+    }
+    .variant-desc {
+        font-size: 0.8rem;
+        margin-top: 4px;
+    }
+</style>
+
+<script src="{{ url_for('static', filename='js/models.js') }}"></script>
+{% endblock %}

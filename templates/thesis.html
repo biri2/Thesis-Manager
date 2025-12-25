@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <!-- HEADER CONTENT -->
+    <div style="padding: 0 0 16px; border-bottom: 1px solid var(--card-border); margin-bottom: 30px;">
+        <h1 style="color: var(--text-main); font-size: 1.8rem; line-height: 1.3;">Thesis Project — Climate Rare Disasters, Inequality, and Financial Amplification in a Nonlinear HANK-DSGE</h1>
+        <div class="subtitle" style="margin-top: 10px;">
+          This document explains the thesis idea in a “proposal-ready” narrative: motivation, precise research questions,
+          the model and methodology choices, and the specific gap in the literature the thesis is designed to fill.
+        </div>
+    
+        <div class="topbar" style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="pill"><span class="dot red"></span><b>Shock</b> rare climate disasters (risk + realization)</span>
+          <span class="pill"><span class="dot blue"></span><b>HANK</b> inequality / MPC heterogeneity</span>
+          <span class="pill"><span class="dot amber"></span><b>Finance</b> leveraged intermediaries / spreads</span>
+          <span class="pill"><span class="dot green"></span><b>Method</b> nonlinear AD / sequence-space + optional NN</span>
+          <span class="pill"><span class="dot purple"></span><b>Empirics</b> calibration + (optional) estimation</span>
+        </div>
+    </div>
+
+    <!-- TABLE OF CONTENTS -->
+    <section class="thesis-card" id="toc" style="margin-bottom: 30px;">
+        <h2 style="margin-bottom:15px; font-size: 1rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px;">Table of Contents</h2>
+        <div class="toc" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <a href="#executive" class="toc-link">1) Executive Summary<span>What the thesis does, in one page</span></a>
+          <a href="#questions" class="toc-link">2) Research Questions & Hypotheses<span>What you will test and quantify</span></a>
+          <a href="#gap" class="toc-link">3) Literature Gap & Contribution<span>What is missing in existing work</span></a>
+          <a href="#model" class="toc-link">4) Model Design (Blocks & Mechanisms)<span>HANK + banks + NK + disaster process</span></a>
+          <a href="#methods" class="toc-link">5) Solution & Estimation Strategy<span>Why nonlinear + where ML fits</span></a>
+          <a href="#deliverables" class="toc-link">6) Deliverables & Success Criteria<span>What “done” means in practice</span></a>
+        </div>
+    </section>
+
+    <!-- CONTENT LIST -->
+    <div class="thesis-grid">
+    
+        <!-- 1) EXECUTIVE SUMMARY -->
+        <section class="thesis-card" id="executive">
+          <h2>1) Executive Summary</h2>
+    
+          <p>
+            Climate change increases macroeconomic tail risk: low-probability, high-severity disasters (hurricanes, floods, wildfires)
+            can generate large and persistent output losses. The core thesis idea is that <b>tail events do not propagate through the economy
+            like scaled-up normal shocks</b> because they interact with (i) household balance sheets and precautionary behavior and (ii) leveraged
+            financial intermediaries.
+          </p>
+    
+          <p>
+            The thesis proposes a nonlinear HANK-DSGE model with nominal rigidities and a central bank rule, augmented with an intermediary
+            sector (“experts”/banks) subject to a leverage (skin-in-the-game) constraint. The model is designed to produce a <b>double amplification</b>:
+          </p>
+    
+          <ul>
+            <li><b>Inequality/MPC channel:</b> heterogeneous households (borrowing constraints, wealth distribution) imply that income/wealth shocks hit high-MPC agents hardest, amplifying aggregate demand contractions.</li>
+            <li><b>Financial accelerator channel:</b> disasters erode intermediary net worth, tighten leverage constraints, widen spreads, and depress investment/output—creating feedback loops.</li>
+          </ul>
+    
+          <p>
+            Methodologically, the thesis relies on modern nonlinear solution tools (automatic differentiation and sequence-space style solvers)
+            and, if feasible, an ML layer (neural network surrogate) to enable extensive scenario analysis and/or estimation. 
+          </p>
+    
+          <div class="callout">
+            <b>Thesis claim (in one line):</b>
+            The macro impact of climate rare disasters is <b>state-dependent and strongly amplified</b> when inequality-driven MPC heterogeneity interacts
+            with leveraged intermediation—changing the monetary policy trade-off relative to representative-agent climate DSGEs.
+          </div>
+
+          <!-- Integrated Aside: At a Glance -->
+          <div class="box" style="margin-top: 20px; border-style: solid; border-color: var(--card-border); background: var(--bg-secondary);">
+             <h3 style="margin-top:0;">At a Glance: Novelty & Values</h3>
+             <div class="checklist">
+                <div class="item" style="border:none; background:transparent; padding-left:0;">
+                   <p><b>What is new?</b> A unified framework that simultaneously includes climate rare disasters, household heterogeneity, and leveraged intermediation.</p>
+                   <div class="chips"><span class="chip core">Core contribution</span></div>
+                </div>
+                <div class="item" style="border:none; background:transparent; padding-left:0;">
+                   <p><b>What do you measure?</b> Amplification ratios (banks ON/OFF), distributional impacts, and policy trade-offs.</p>
+                   <div class="chips"><span class="chip hi">Quantitative</span></div>
+                </div>
+             </div>
+          </div>
+        </section>
+
+        <!-- 2) RESEARCH QUESTIONS -->
+        <section class="thesis-card" id="questions">
+          <h2>2) Research Questions & Testable Hypotheses</h2>
+    
+          <p>
+            The thesis should be framed around a small number of questions that directly map to model mechanisms and deliverables.
+            Below, each question comes with a measurable output (what you will compute/plot) and a working hypothesis.
+          </p>
+    
+          <div class="checklist">
+    
+            <div class="item">
+              <div class="item-head">
+                <div>
+                  <div class="title">RQ1 — Transmission: How do climate rare disasters propagate in a HANK economy with leveraged intermediation?</div>
+                  <div class="meta"><span class="badge"><span class="stripe red"></span>Disaster</span> <span class="badge"><span class="stripe blue"></span>HANK</span> <span class="badge"><span class="stripe amber"></span>Banks</span></div>
+                </div>
+                <div class="chips">
+                  <span class="chip core">Core</span><span class="chip hi">D2–D5</span>
+                </div>
+              </div>
+              <p><b>Measure:</b> nonlinear impulse responses (output, inflation, spreads, net worth, consumption distribution).</p>
+              <p><b>Hypothesis:</b> disasters generate larger and more persistent recessions when both (i) high-MPC households and (ii) bank constraints are present (“double amplification”).</p>
+            </div>
+    
+            <div class="item">
+              <div class="item-head">
+                <div>
+                  <div class="title">RQ2 — Decomposition: What share of amplification is due to inequality/MPCs vs financial frictions (and their interaction)?</div>
+                  <div class="meta"><span class="badge"><span class="stripe blue"></span>Inequality</span> <span class="badge"><span class="stripe amber"></span>Finance</span></div>
+                </div>
+                <div class="chips">
+                  <span class="chip core">Core</span><span class="chip hi">D6</span>
+                </div>
+              </div>
+              <p><b>Measure:</b> counterfactual decomposition (HANK vs RANK holding finance fixed; banks vs no-banks holding heterogeneity fixed; interaction term).</p>
+              <p><b>Hypothesis:</b> the interaction is not additive—heterogeneity increases the severity of the credit crunch because demand collapses more in “bad” states.</p>
+            </div>
+    
+            <div class="item">
+              <div class="item-head">
+                <div>
+                  <div class="title">RQ3 — Policy trade-off: How does the monetary policy problem change under disaster risk (ex ante) vs disaster realization (ex post)?</div>
+                  <div class="meta"><span class="badge"><span class="stripe blue"></span>Monetary</span> <span class="badge"><span class="stripe red"></span>Tail risk</span></div>
+                </div>
+                <div class="chips">
+                  <span class="chip hi">High value</span><span class="chip med">D5</span>
+                </div>
+              </div>
+              <p><b>Measure:</b> policy rule comparisons (Taylor coefficients / inertia), inflation-output paths, and “policy space” scenarios (optional ELB).</p>
+              <p><b>Hypothesis:</b> strict inflation stabilization can deepen output losses post-disaster, while ignoring ex-ante disaster risk can create a persistent demand shortfall.</p>
+            </div>
+    
+            <div class="item">
+              <div class="item-head">
+                <div>
+                  <div class="title">RQ4 — Nonlinearity/state dependence: Are disaster responses convex in shock size or initial leverage?</div>
+                  <div class="meta"><span class="badge"><span class="stripe green"></span>Nonlinear</span> <span class="badge"><span class="stripe amber"></span>Leverage</span></div>
+                </div>
+                <div class="chips">
+                  <span class="chip hi">High value</span><span class="chip med">D5</span>
+                </div>
+              </div>
+              <p><b>Measure:</b> peak output loss vs disaster size; same shock under low vs high intermediary net worth.</p>
+              <p><b>Hypothesis:</b> nonlinear amplification is strongest when intermediary constraints bind and when more households become liquidity constrained after the shock.</p>
+            </div>
+    
+          </div>
+        </section>
+
+        <!-- 3) LITERATURE GAP -->
+        <aside class="thesis-card" id="gap">
+          <h2>3) The Literature Gap (What Your Thesis Fills)</h2>
+    
+          <p>
+            The literature already contains partial overlaps (two components at a time), but rarely the full integration.
+            The project proposal explicitly identifies the missing combination: <b>HANK + climate rare disasters + leveraged intermediaries</b>.
+          </p>
+    
+          <div class="checklist">
+            <div class="item">
+              <div class="item-head">
+                <div>
+                  <div class="title">What exists (partial overlap)</div>
+                  <div class="meta">Common in isolation</div>
+                </div>
+              </div>
+              <ul>
+                <li><b>Climate disasters + monetary DSGE</b> (often representative-agent): captures trade-offs but misses inequality and MPC channels.</li>
+                <li><b>HANK models</b> (monetary transmission + redistribution): strong on distribution, weaker on climate tail events and disaster-state nonlinearity.</li>
+                <li><b>Financial accelerator / intermediary models</b>: strong on spreads and crises, typically not embedded with household heterogeneity and climate-disaster processes simultaneously.</li>
+              </ul>
+            </div>
+    
+            <div class="item">
+              <div class="item-head">
+                <div>
+                  <div class="title">What is missing (your contribution)</div>
+                  <div class="meta"><span class="chip core">Core gap</span></div>
+                </div>
+              </div>
+              <p>
+                A quantitative framework where a climate rare-disaster process simultaneously (i) reshapes household balance sheets and consumption via MPC heterogeneity
+                and (ii) stresses leveraged intermediaries, producing endogenous spreads and investment collapse, all within a New Keynesian monetary environment.
+              </p>
+            </div>
+    
+            <div class="item">
+              <div class="item-head">
+                <div>
+                  <div class="title">Why now (feasibility)</div>
+                  <div class="meta"><span class="chip hi">Method-enabled</span></div>
+                </div>
+              </div>
+              <p>
+                The thesis is feasible in 2025 because modern methods (sequence-space ideas, automatic differentiation Newton solvers, and neural network surrogates)
+                make nonlinear HANK-style models tractable for extensive scenario analysis and potentially estimation. 
+              </p>
+            </div>
+          </div>
+          
+          <!-- Integrated Logic Chain -->
+          <div class="box" style="margin-top:20px;">
+             <b>Logic Chain:</b> Currently, integrated models are missing (Gap) -> This asks how they interact (RQ1) and how much creates amplification (RQ2).
+             The representation bias leads to inaccurate trade-offs (RQ3).
+          </div>
+        </aside>
+    
+        <!-- 4) MODEL DESIGN -->
+        <section class="thesis-card" id="model">
+          <h2>4) Model Design: Blocks, State Variables, and Mechanisms</h2>
+    
+          <p>
+            The model is intentionally modular: each block has precedent, but the novelty comes from integrating them and quantifying interactions.
+          </p>
+    
+          <h3><span class="badge"><span class="stripe blue"></span>Households (HANK)</span></h3>
+          <ul>
+            <li>Continuum of households with incomplete markets, idiosyncratic income risk, borrowing constraints, and heterogeneous MPCs.</li>
+            <li>Key output objects: consumption policy functions by wealth/income state; distributional responses to shocks.</li>
+          </ul>
+    
+          <h3><span class="badge"><span class="stripe amber"></span>Experts / Banks (Intermediation)</span></h3>
+          <ul>
+            <li>Small measure of experts intermediating deposits into productive capital, subject to leverage/pledgeability constraints.</li>
+            <li>Key output objects: intermediary net worth, leverage, spreads/credit wedge, investment sensitivity in stress states.</li>
+          </ul>
+    
+          <h3><span class="badge"><span class="stripe red"></span>Climate rare-disaster process</span></h3>
+          <ul>
+            <li>Rare event modeled as a discrete state (Markov/Poisson-style): sharp productivity drop and/or capital destruction; also consider time-varying disaster risk as an extension.</li>
+            <li>Key output objects: ex-ante effects (precautionary saving, lower r*) vs ex-post realized disaster path.</li>
+          </ul>
+    
+          <h3><span class="badge"><span class="stripe blue"></span>Nominal rigidities + monetary policy</span></h3>
+          <ul>
+            <li>New Keynesian Phillips curve / sticky prices; central bank sets nominal rate by Taylor rule; optional effective lower bound as a later extension.</li>
+            <li>Key output objects: inflation-output trade-off under disaster risk/realization; welfare proxy comparisons across policy rules.</li>
+          </ul>
+    
+          <div class="box">
+            <b>Core mechanism to highlight in the write-up:</b>
+            the disaster shock hits supply directly (TFP/capital) but also generates demand contractions through precautionary and distributional channels;
+            the intermediary constraint translates asset value losses into a credit crunch; these channels reinforce each other in “bad” states.
+          </div>
+        </section>
+    
+        <!-- 5) METHODS -->
+        <aside class="thesis-card" id="methods">
+          <h2>5) Solution & (Optional) Estimation Strategy</h2>
+    
+          <p>
+            The thesis is built around a pragmatic computational plan: (i) solve/validate the nonlinear model for large shocks and (ii) optionally add
+            an ML-based surrogate/estimation layer.
+          </p>
+    
+          <h3><span class="badge"><span class="stripe green"></span>Nonlinear solution (core)</span></h3>
+          <ul>
+            <li>Use automatic differentiation and sequence-space style Newton methods to compute transition paths for large shocks (disasters).</li>
+            <li>Validation: residual diagnostics, Euler errors, and benchmarking against simpler versions of the model.</li>
+          </ul>
+    
+          <h3><span class="badge"><span class="stripe green"></span>Neural networks (optional but coherent)</span></h3>
+          <ul>
+            <li>Neural nets can approximate DSGE/HANK policy functions and handle high-dimensional state spaces; methods include supervised training and equation-error minimization (“unsupervised” equilibrium nets).</li>
+            <li>Optional: train a surrogate mapping from states/shocks to outcomes to accelerate scenario analysis and allow partial estimation. </li>
+          </ul>
+    
+          <h3><span class="badge"><span class="stripe purple"></span>Empirical component (calibration + optional estimation)</span></h3>
+          <ul>
+            <li>Baseline: disciplined calibration (disaster frequency/severity; bank leverage; HANK wealth/MPC moments) + moment fit table.</li>
+            <li>Optional: estimate a small subset of parameters using moments or approximate likelihood methods enabled by ML tools. </li>
+          </ul>
+    
+          <div class="box">
+            <b>Scope control rule:</b>
+            The ML layer is an <b>extension</b>. The thesis is already strong if it delivers: nonlinear solution + double-amplification decomposition + monetary policy experiments.
+          </div>
+    
+          <div class="callout">
+            <b>Optional alternative angle (keep optional):</b>
+            replacing “fully rational” consumption-saving rules with reinforcement learning agents can model bounded rationality and learning dynamics,
+            but it increases scope and should only be pursued if the core model is already stable.
+          </div>
+        </aside>
+    
+        <!-- 6) DELIVERABLES -->
+        <section class="thesis-card" id="deliverables">
+          <h2>6) Deliverables and What “Success” Looks Like</h2>
+    
+          <p>
+            The thesis is best managed as a sequence of deliverables that each produces a tangible artifact:
+            a PDF section, a calibrated table, a reproducible model run, a figure set, and a decomposition.
+          </p>
+    
+          <div class="checklist">
+            <div class="item">
+              <div class="item-head">
+                <div class="title">D0 — Model specification (equations + blocks)</div>
+                <div class="chips"><span class="chip core">Must</span></div>
+              </div>
+              <p>Clear block-by-block presentation (households, banks, firms, NKPC, policy, disasters) and the disaster process definition.</p>
+            </div>
+    
+            <div class="item">
+              <div class="item-head">
+                <div class="title">D1 — Calibration/targets sheet</div>
+                <div class="chips"><span class="chip core">Must</span></div>
+              </div>
+              <p>Parameter table + sources and a “model vs data moments” table (inequality/MPC + bank leverage/spreads + macro volatility).</p>
+            </div>
+    
+            <div class="item">
+              <div class="item-head">
+                <div class="title">D2–D5 — Solved nonlinear model + experiments</div>
+                <div class="chips"><span class="chip core">Must</span><span class="chip hi">Quantitative</span></div>
+              </div>
+              <p>Nonlinear IRFs for disaster realization and disaster-risk shocks; comparisons across policy rules and initial leverage states.</p>
+            </div>
+    
+            <div class="item">
+              <div class="item-head">
+                <div class="title">D6 — Decomposition: inequality vs finance amplification</div>
+                <div class="chips"><span class="chip core">Signature result</span></div>
+              </div>
+              <p>Counterfactual accounting that quantifies how much amplification comes from HANK vs banks vs their interaction.</p>
+            </div>
+    
+            <div class="item">
+              <div class="item-head">
+                <div class="title">D7 — Optional: NN surrogate + (partial) estimation</div>
+                <div class="chips"><span class="chip med">Optional</span></div>
+              </div>
+              <p>Neural approximation of policy/transition mapping used to speed counterfactuals and/or enable a limited estimation exercise. </p>
+            </div>
+          </div>
+    
+          <div class="box">
+            <b>Thesis success criteria (simple and defensible):</b>
+            (1) a stable nonlinear solution under large shocks; (2) a quantified double-amplification mechanism; (3) a clear monetary policy trade-off narrative supported by figures.
+          </div>
+        </section>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -50% 0px', // Trigger when section is halfway up
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                if(!id) return;
+                
+                // Clear all active
+                document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+                
+                // Set active
+                const link = document.querySelector(`.toc-link[href="#${id}"]`);
+                if(link) link.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    // Track all sections with IDs
+    document.querySelectorAll('section[id], aside[id]').forEach(section => {
+        observer.observe(section);
+    });
+});
+</script>
+{% endblock %}

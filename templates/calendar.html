@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Calendar | Thesis Manager{% endblock %}
+
+{% block content %}
+<div class="calendar-layout">
+    <!-- Sidebar: Deadlines -->
+    <section class="deadlines-sidebar">
+        <div class="sidebar-header">
+            <h3><i class="ph ph-flag-checkered"></i> Milestones</h3>
+        </div>
+        <div class="deadlines-list" id="deadlines-container">
+            <!-- Dynamic Content -->
+        </div>
+    </section>
+
+    <!-- Main: Calendar Grid -->
+    <section class="calendar-main">
+        <div class="calendar-header">
+            <div class="month-nav">
+                <button class="nav-btn" onclick="changeMonth(-1)"><i class="ph ph-caret-left"></i></button>
+                <h2 id="current-month-display">December 2025</h2>
+                <button class="nav-btn" onclick="changeMonth(1)"><i class="ph ph-caret-right"></i></button>
+                <button class="btn-today" onclick="goToToday()">Today</button>
+            </div>
+            <div class="calendar-actions">
+                <!-- View Switcher -->
+                <div class="view-switch" style="background:rgba(255,255,255,0.05); padding:4px; border-radius:8px; display:flex; gap:4px;">
+                    <button class="btn-view active" id="btn-view-grid" onclick="switchView('grid')" title="Grid View" style="padding:6px; background:var(--accent-primary); border:none; border-radius:6px; color:white;"><i class="ph ph-squares-four"></i></button>
+                    <button class="btn-view" id="btn-view-gantt" onclick="switchView('gantt')" title="Timeline View" style="padding:6px; background:transparent; border:none; border-radius:6px; color:var(--text-muted);"><i class="ph ph-list-dashes"></i></button>
+                </div>
+                
+                <div class="calendar-legend">
+                    <span class="legend-item"><span class="dot type-deliverable"></span> Deliverable</span>
+                    <span class="legend-item"><span class="dot type-meeting"></span> Meeting</span>
+                    <span class="legend-item"><span class="dot type-submission"></span> Submission</span>
+                    <span class="legend-item"><span class="dot type-reading"></span> Reading</span>
+                    <span class="legend-item"><span class="dot type-compute"></span> Compute</span>
+                </div>
+                <button class="btn-primary" onclick="openAddModal()">
+                    <i class="ph ph-plus"></i> Add Event
+                </button>
+            </div>
+        </div>
+
+        <div id="view-grid-container">
+            <div class="calendar-grid-header">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+            
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- Dynamic Days -->
+            </div>
+        </div>
+
+        <div id="view-gantt-container" style="display:none; padding:20px;">
+            <p style="color:var(--text-muted); margin-bottom:20px;">Project Timeline & Dependencies</p>
+            <div id="gantt-chart" style="display:flex; flex-direction:column; gap:15px;">
+                <!-- Gantt Rows Injected Here -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Modal for adding/editing events -->
+<div id="event-modal" class="modal hidden">
+    <div class="modal-content">
+        <h3 id="modal-title">Add Event</h3>
+        <input type="hidden" id="event-id"> <!-- Hidden ID for edits -->
+        
+        <label style="display:block; margin-bottom:5px; color:#aaa; font-size:0.85rem;">Title</label>
+        <input type="text" id="event-title" placeholder="e.g., Draft Review">
+        
+        <label style="display:block; margin-bottom:5px; color:#aaa; font-size:0.85rem;">Date</label>
+        <input type="date" id="event-date">
+        
+        <label style="display:block; margin-bottom:5px; color:#aaa; font-size:0.85rem;">Type</label>
+        <select id="event-type" onchange="toggleNotesField()" style="width:100%; padding:10px; margin-bottom:12px; background:rgba(0,0,0,0.3); border:1px solid var(--card-border); border-radius:8px; color:white;">
+            <option value="deliverable">Deliverable (Milestone)</option>
+            <option value="meeting">Meeting (Supervisor)</option>
+            <option value="submission">Submission Deadline</option>
+            <option value="reading">Reading Block</option>
+            <option value="compute">Compute / Model Run</option>
+        </select>
+
+        <label style="display:block; margin-bottom:5px; color:#aaa; font-size:0.85rem;">Description</label>
+        <textarea id="event-desc" rows="2" style="width:100%; padding:10px; margin-bottom:12px; background:rgba(0,0,0,0.3); border:1px solid var(--card-border); border-radius:8px; color:white; font-family:inherit;" placeholder="Optional details..."></textarea>
+
+        <!-- Meeting Notes Section (Conditional) -->
+        <div id="notes-section" style="display:none;">
+            <label style="display:block; margin-bottom:5px; color:#aaa; font-size:0.85rem;">Meeting Notes / Feedback</label>
+            <textarea id="event-notes" rows="4" class="meeting-notes-area" style="width:100%; border:1px solid var(--card-border); border-radius:8px; color:white;" placeholder="• Discussed calibration...&#10;• Action: Fix gamma param"></textarea>
+        </div>
+
+        <div style="display:flex; align-items:center; margin-bottom:15px; background:rgba(255,255,255,0.05); padding:8px; border-radius:8px;">
+            <input type="checkbox" id="event-completed" style="width:auto; margin-right:10px;">
+            <label for="event-completed" style="font-size:0.9rem; cursor:pointer;">Mark as Completed</label>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-text-danger" id="btn-delete-event" onclick="deleteEvent()" style="margin-right:auto; display:none;">Delete</button>
+            <button onclick="closeModal()">Cancel</button>
+            <button class="primary" onclick="saveEvent()">Save</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+{% endblock %}

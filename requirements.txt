@@ -1,0 +1,6 @@
+# Absolute Minimum for Dashboard
+flask>=2.3.0
+pyyaml>=6.0
+
+# Required only if running via Docker
+gunicorn>=20.1.0

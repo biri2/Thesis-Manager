@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Thesis Manager{% endblock %}
+
+{% block content %}
+<div style="margin-top: 60px; text-align:center; margin-bottom: 60px;">
+    <h2
+        style="font-size:3rem; margin-bottom:16px; font-weight: 800; letter-spacing: -0.03em; background: linear-gradient(135deg, var(--text-main) 30%, var(--accent-primary) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+        Advanced Thesis Control
+    </h2>
+    <p class="subtitle" style="font-size:1.2rem; max-width:700px; margin:0 auto; line-height:1.7; opacity: 0.8; font-weight: 400;">
+        A unified management environment for heterogeneous-agent macro modeling, literature synthesis, and nonlinear risk estimation.
+    </p>
+</div>
+
+<!-- Main Navigation Grid -->
+<div class="card-grid">
+
+    <!-- col 1: Progress -->
+    <a href="{{ url_for('progress') }}" class="card-link" style="border-top: 4px solid var(--accent-progress);">
+        <div class="icon-box">
+            <i class="ph ph-trend-up"></i>
+        </div>
+        <h3>Progress Tracker</h3>
+        <p>Deliverables status (D0–D7) & milestones</p>
+    </a>
+
+    <!-- col 2: Calendar -->
+    <a href="{{ url_for('calendar') }}" class="card-link" style="border-top: 4px solid var(--accent-calendar);">
+        <div class="icon-box">
+            <i class="ph ph-calendar-check"></i>
+        </div>
+        <h3>Calendar</h3>
+        <p>Deadlines, workshops & timeline</p>
+    </a>
+
+    <!-- col 3: Reading List -->
+    <a href="{{ url_for('reading_list') }}" class="card-link" style="border-top: 4px solid var(--accent-reading);">
+        <div class="icon-box">
+            <i class="ph ph-books"></i>
+        </div>
+        <h3>Reading List</h3>
+        <p>Manage papers, topics & refs</p>
+    </a>
+
+    <!-- col 4: Models Registry -->
+    <a href="{{ url_for('models') }}" class="card-link" style="border-top: 4px solid var(--accent-models);">
+        <div class="icon-box">
+            <i class="ph ph-graph"></i>
+        </div>
+        <h3>Models Registry</h3>
+        <p>HANK modules, layers & equations</p>
+    </a>
+
+    <!-- col 5: Data Matrix -->
+    <a href="{{ url_for('data_matrix') }}" class="card-link" style="border-top: 4px solid var(--accent-data);">
+        <div class="icon-box">
+            <i class="ph ph-database"></i>
+        </div>
+        <h3>Data Matrix</h3>
+        <p>Empirical targets & source assets</p>
+    </a>
+
+    <!-- col 6: Thesis Narrative -->
+    <a href="{{ url_for('thesis') }}" class="card-link" style="border-top: 4px solid var(--accent-thesis);">
+        <div class="icon-box">
+            <i class="ph ph-scroll"></i>
+        </div>
+        <h3>Thesis Narrative</h3>
+        <p>Drafting the core argument</p>
+    </a>
+
+    <!-- col 7: Model Blueprint -->
+    <a href="{{ url_for('model_blueprint') }}" class="card-link" style="border-top: 4px solid var(--accent-blueprint);">
+        <div class="icon-box">
+            <i class="ph ph-compass"></i>
+        </div>
+        <h3>Model Blueprint</h3>
+        <p>Full D0 specification & consistency checks</p>
+    </a>
+
+</div>
+
+
+{% endblock %}

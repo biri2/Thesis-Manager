@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}Progress Tracking | Thesis Manager{% endblock %}
+
+{% block content %}
+<div class="progress-dashboard">
+    <div class="header-section" style="margin-bottom: 30px;">
+        <h2>Thesis Progress Tracker</h2>
+        <p style="color: var(--text-muted);">Monitor the status of your core deliverables and optional extensions.</p>
+    </div>
+
+    <!-- Overall Summary -->
+    <div class="summary-grid">
+        <div class="summary-card">
+            <span class="summary-label">Overall Completion</span>
+            <div class="summary-value overall-progress-text">0%</div>
+            <div class="progress-track overall-track">
+                <div class="progress-fill overall-progress-fill"></div>
+            </div>
+        </div>
+        <div class="summary-card">
+            <span class="summary-label">Core Deliverables</span>
+            <div class="summary-value">7</div>
+            <span class="deliv-badge core">D0 — D6</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-label">Extensions</span>
+            <div class="summary-value">1</div>
+            <span class="deliv-badge opt">D7</span>
+        </div>
+    </div>
+
+    <!-- Deliverables Grid -->
+    <h3 style="margin-bottom: 24px;">Core Deliverables</h3>
+    <div class="card-grid" style="margin-top: 20px;">
+        
+        <!-- D0 -->
+        <div class="card deliverable-card" data-id="d0">
+            <div class="deliv-header">
+                <div>
+                    <h3 class="deliv-title">D0: Model Specification</h3>
+                    <div class="deliv-subtitle">Equations, blocks, and shock processes</div>
+                </div>
+                <span class="deliv-badge core">Core</span>
+            </div>
+            <div class="progress-info">
+                <span>Progress</span>
+                <span class="progress-text">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <!-- Tasks Container -->
+            <div class="task-grid" id="tasks-d0">
+                <!-- Tasks will be injected here by JS -->
+            </div>
+            <button class="btn-add-task" onclick="addTask('d0')">
+                <i class="ph ph-plus"></i> Add Task
+            </button>
+        </div>
+
+        <!-- D1 -->
+        <div class="card deliverable-card" data-id="d1">
+            <div class="deliv-header">
+                <div>
+                    <h3 class="deliv-title">D1: Calibration</h3>
+                    <div class="deliv-subtitle">Parameter values and empirical targets</div>
+                </div>
+                <span class="deliv-badge core">Core</span>
+            </div>
+            <div class="progress-info">
+                <span>Progress</span>
+                <span class="progress-text">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <!-- Tasks Container -->
+            <div class="task-grid" id="tasks-d1"></div>
+            <button class="btn-add-task" onclick="addTask('d1')">
+                <i class="ph ph-plus"></i> Add Task
+            </button>
+        </div>
+
+        <!-- D2 -->
+        <div class="card deliverable-card" data-id="d2">
+            <div class="deliv-header">
+                <div>
+                    <h3 class="deliv-title">D2: Baseline Solution</h3>
+                    <div class="deliv-subtitle">Steady State and Transition Dynamics</div>
+                </div>
+                <span class="deliv-badge core">Core</span>
+            </div>
+            <div class="progress-info">
+                <span>Progress</span>
+                <span class="progress-text">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <!-- Tasks Container -->
+            <div class="task-grid" id="tasks-d2"></div>
+            <button class="btn-add-task" onclick="addTask('d2')">
+                <i class="ph ph-plus"></i> Add Task
+            </button>
+        </div>
+
+        <!-- D3 -->
+        <div class="card deliverable-card" data-id="d3">
+            <div class="deliv-header">
+                <div>
+                    <h3 class="deliv-title">D3: Bank Block</h3>
+                    <div class="deliv-subtitle">Financial Intermediation Module</div>
+                </div>
+                <span class="deliv-badge core">Core</span>
+            </div>
+            <div class="progress-info">
+                <span>Progress</span>
+                <span class="progress-text">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <!-- Tasks Container -->
+            <div class="task-grid" id="tasks-d3"></div>
+            <button class="btn-add-task" onclick="addTask('d3')">
+                <i class="ph ph-plus"></i> Add Task
+            </button>
+        </div>
+
+        <!-- D4 -->
+        <div class="card deliverable-card" data-id="d4">
+            <div class="deliv-header">
+                <div>
+                    <h3 class="deliv-title">D4: Climate Disasters</h3>
+                    <div class="deliv-subtitle">Tail risk and shock implementation</div>
+                </div>
+                <span class="deliv-badge core">Core</span>
+            </div>
+            <div class="progress-info">
+                <span>Progress</span>
+                <span class="progress-text">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <!-- Tasks Container -->
+            <div class="task-grid" id="tasks-d4"></div>
+            <button class="btn-add-task" onclick="addTask('d4')">
+                <i class="ph ph-plus"></i> Add Task
+            </button>
+        </div>
+
+        <!-- D5 -->
+        <div class="card deliverable-card" data-id="d5">
+            <div class="deliv-header">
+                <div>
+                    <h3 class="deliv-title">D5: Experiments</h3>
+                    <div class="deliv-subtitle">Nonlinearity and Policy Rules</div>
+                </div>
+                <span class="deliv-badge core">Core</span>
+            </div>
+            <div class="progress-info">
+                <span>Progress</span>
+                <span class="progress-text">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <!-- Tasks Container -->
+            <div class="task-grid" id="tasks-d5"></div>
+            <button class="btn-add-task" onclick="addTask('d5')">
+                <i class="ph ph-plus"></i> Add Task
+            </button>
+        </div>
+
+        <!-- D6 -->
+        <div class="card deliverable-card" data-id="d6">
+            <div class="deliv-header">
+                <div>
+                    <h3 class="deliv-title">D6: Decomposition</h3>
+                    <div class="deliv-subtitle">Attribution of amplification</div>
+                </div>
+                <span class="deliv-badge core">Core</span>
+            </div>
+            <div class="progress-info">
+                <span>Progress</span>
+                <span class="progress-text">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <!-- Tasks Container -->
+            <div class="task-grid" id="tasks-d6"></div>
+            <button class="btn-add-task" onclick="addTask('d6')">
+                <i class="ph ph-plus"></i> Add Task
+            </button>
+        </div>
+    </div>
+
+    <!-- Optional Deliverables -->
+    <h3 style="margin-top: 40px; margin-bottom: 24px;">Extensions</h3>
+    <div class="card-grid">
+         <!-- D7 -->
+         <div class="card deliverable-card" data-id="d7">
+            <div class="deliv-header">
+                <div>
+                    <h3 class="deliv-title">D7: Neural Surrogate</h3>
+                    <div class="deliv-subtitle">Optional ML acceleration & estimation</div>
+                </div>
+                <span class="deliv-badge opt">Optional</span>
+            </div>
+            <div class="progress-info">
+                <span>Progress</span>
+                <span class="progress-text">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <!-- Tasks Container -->
+            <div class="task-grid" id="tasks-d7"></div>
+            <button class="btn-add-task" onclick="addTask('d7')">
+                <i class="ph ph-plus"></i> Add Task
+            </button>
+        </div>
+    </div>
+
+</div>
+<script src="{{ url_for('static', filename='js/progress.js') }}"></script>
+{% endblock %}

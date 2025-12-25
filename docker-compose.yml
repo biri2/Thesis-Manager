@@ -1,0 +1,12 @@
+services:
+  thesis-manager:
+    build: .
+    container_name: thesis_manager
+    ports:
+      - "5050:5050"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_DEBUG=1
+    command: gunicorn -w 2 -b 0.0.0.0:5050 --reload app:app

@@ -1,0 +1,418 @@
+{% extends "base.html" %}
+
+{% block title %}Data × Models Matrix | Thesis Manager{% endblock %}
+
+{% block content %}
+<div class="data-container">
+    <header class="header-section" style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+            <h1>Data × Models Matrix</h1>
+            <div class="sub" style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">
+                Mapping of datasets to each model in your thesis pipeline.
+            </div>
+            
+            <div class="legend" style="display: flex; gap: 10px; align-items: center;">
+                <span class="pill"><span class="dot req"></span><b style="color:var(--text-main)">✓</b> Required</span>
+                <span class="pill"><span class="dot opt"></span><b style="color:var(--text-main)">◐</b> Optional</span>
+                <span class="pill"><span class="dot no"></span><b style="color:var(--text-main)">—</b> Not needed</span>
+            </div>
+        </div>
+        <button id="add-data-btn" class="btn-primary">
+            <i class="ph ph-plus-circle"></i> Add Dataset
+        </button>
+    </header>
+
+    <section class="card data-matrix-card">
+        <div class="table-wrap" role="region" aria-label="Data by model table" tabindex="0">
+            <table id="data-matrix-table">
+                <thead>
+                    <tr>
+                        <th>Data (source)</th>
+                        <th>M0<br><span class="col-sub">Data/Targets</span></th>
+                        <th>M1<br><span class="col-sub">RANK NK</span></th>
+                        <th>M2<br><span class="col-sub">RANK+Disasters</span></th>
+                        <th>M3<br><span class="col-sub">HANK</span></th>
+                        <th>M4<br><span class="col-sub">HANK+Banks</span></th>
+                        <th>M5<br><span class="col-sub">HANK+Disasters</span></th>
+                        <th>M6<br><span class="col-sub">Full Model</span></th>
+                        <th>M7<br><span class="col-sub">Decomposition</span></th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="data-table-body">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Data Topics Section -->
+    <div class="section-divider" style="margin: 60px 0 30px; border-top: 1px solid var(--card-border); position: relative;">
+        <span style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--bg); padding: 0 20px; color: var(--accent-primary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem;">Browse by Topic</span>
+    </div>
+
+    <div id="data-topics-list" class="topics-grid">
+        <!-- Dynamic Topic Groups -->
+    </div>
+
+    <footer class="data-footer" style="margin-top: 40px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+        <span class="pill"><i class="ph ph-info" style="color: var(--accent-primary); margin-right: 5px;"></i> Tip: Keep the “minimum viable” path by treating optional datasets as robustness checks.</span>
+    </footer>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="data-modal" class="modal">
+    <div class="modal-content">
+        <h3 id="modal-title">Add Dataset</h3>
+        <form id="data-form">
+            <input type="hidden" id="item-id">
+            <div class="form-group">
+                <label>Dataset Name</label>
+                <input type="text" id="item-name" required placeholder="e.g. GDP and Inflation">
+            </div>
+            <div class="form-group">
+                <label>Source / Details</label>
+                <input type="text" id="item-source" required placeholder="e.g. Eurostat, ECB SDW">
+            </div>
+            <div class="form-group">
+                <label>Topic Category</label>
+                <select id="item-topic" required>
+                    <option value="Macroeconomics">Macroeconomics</option>
+                    <option value="Monetary Policy">Monetary Policy</option>
+                    <option value="Banking & Credit">Banking & Credit</option>
+                    <option value="Climate & Disasters">Climate & Disasters</option>
+                    <option value="Inequality">Inequality</option>
+                    <option value="Financial Markets">Financial Markets</option>
+                </select>
+            </div>
+            <div class="requirements-setup">
+                <label>Model Requirements</label>
+                <div class="req-grid">
+                    <div class="req-input-group">
+                        <label>M0</label>
+                        <select data-model="M0"><option value="req">Required</option><option value="opt">Optional</option><option value="no">None</option></select>
+                    </div>
+                    <div class="req-input-group">
+                        <label>M1</label>
+                        <select data-model="M1"><option value="req">Required</option><option value="opt">Optional</option><option value="no" selected>None</option></select>
+                    </div>
+                    <div class="req-input-group">
+                        <label>M2</label>
+                        <select data-model="M2"><option value="req">Required</option><option value="opt">Optional</option><option value="no" selected>None</option></select>
+                    </div>
+                    <div class="req-input-group">
+                        <label>M3</label>
+                        <select data-model="M3"><option value="req">Required</option><option value="opt">Optional</option><option value="no" selected>None</option></select>
+                    </div>
+                    <div class="req-input-group">
+                        <label>M4</label>
+                        <select data-model="M4"><option value="req">Required</option><option value="opt">Optional</option><option value="no" selected>None</option></select>
+                    </div>
+                    <div class="req-input-group">
+                        <label>M5</label>
+                        <select data-model="M5"><option value="req">Required</option><option value="opt">Optional</option><option value="no" selected>None</option></select>
+                    </div>
+                    <div class="req-input-group">
+                        <label>M6</label>
+                        <select data-model="M6"><option value="req">Required</option><option value="opt">Optional</option><option value="no" selected>None</option></select>
+                    </div>
+                    <div class="req-input-group">
+                        <label>M7</label>
+                        <select data-model="M7"><option value="req">Required</option><option value="opt">Optional</option><option value="no" selected>None</option></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" id="close-modal">Cancel</button>
+                <button type="submit" class="btn-primary">Save Dataset</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .data-container {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--card-border);
+        font-size: 0.85rem;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .dot.req { background: #3ddc97; box-shadow: 0 0 10px rgba(61, 220, 151, 0.4); }
+    .dot.opt { background: #ffcc66; box-shadow: 0 0 10px rgba(255, 204, 102, 0.4); }
+    .dot.no { background: #6b7c93; }
+
+    .data-matrix-card {
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid var(--card-border);
+    }
+
+    .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1100px;
+    }
+
+    th {
+        background: rgba(255, 255, 255, 0.01);
+        padding: 20px 15px;
+        text-align: center;
+        border-bottom: 2px solid var(--card-border);
+        font-size: 0.9rem;
+        font-weight: 700;
+        vertical-align: top;
+    }
+
+    th:first-child {
+        text-align: left;
+        padding-left: 25px;
+        min-width: 350px;
+    }
+
+    .col-sub {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 500;
+        margin-top: 5px;
+    }
+
+    td {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        vertical-align: middle;
+    }
+
+    td:first-child {
+        text-align: left;
+        padding-left: 25px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--text-main);
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .src {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 400;
+        margin-top: 4px;
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 28px;
+        border-radius: 8px;
+        font-family: var(--font-mono);
+        font-weight: 800;
+        font-size: 0.9rem;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid transparent;
+    }
+
+    .badge.req {
+        color: #3ddc97;
+        border-color: rgba(61, 220, 151, 0.2);
+        background: rgba(61, 220, 151, 0.05);
+    }
+
+    .badge.opt {
+        color: #ffcc66;
+        border-color: rgba(255, 204, 102, 0.2);
+        background: rgba(255, 204, 102, 0.05);
+    }
+
+    .badge.no {
+        color: #6b7c93;
+        opacity: 0.4;
+    }
+
+    /* CRUD UI Styles */
+    .btn-primary {
+        background: var(--accent-primary);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+    }
+    .btn-primary:hover {
+        filter: brightness(1.2);
+        transform: translateY(-2px);
+    }
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-main);
+        border: 1px solid var(--card-border);
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .action-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+    .action-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-main);
+    }
+    .action-btn.delete:hover {
+        color: #ff4d4d;
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+    .modal.active {
+        display: flex;
+    }
+    .modal-content {
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+    .form-group input, .form-group select {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        padding: 12px;
+        color: var(--text-main);
+        font-family: var(--font-sans);
+    }
+
+    .req-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-top: 10px;
+    }
+    .req-input-group label {
+        font-size: 0.7rem;
+        margin-bottom: 4px;
+    }
+    .req-input-group select {
+        padding: 6px;
+        font-size: 0.8rem;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    /* Topics Grid */
+    .topics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+    }
+    .topic-group {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--card-border);
+        border-radius: 16px;
+        padding: 20px;
+    }
+    .topic-header {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .topic-item {
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .topic-item:last-child {
+        border-bottom: none;
+    }
+    .topic-item-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-main);
+    }
+    .topic-item-src {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+</style>
+
+<script src="{{ url_for('static', filename='js/data.js') }}"></script>
+{% endblock %}

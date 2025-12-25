@@ -1,0 +1,30 @@
+# OS junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Python / Environment
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+.venv
+env/
+.conda/
+
+# IDEs
+.vscode/
+.idea/
+
+# Flask / Web
+instance/
+.webassets-cache
+static/.webassets-cache
+
+# Docker
+.docker/
+
+# Literature (Non-licensed PDFs)
+literature/

@@ -1,0 +1,357 @@
+# D0_1_states.yaml
+schema_version: "0.3"
+
+meta:
+  project_short_title: "[fill]"
+  frequency: "quarterly"
+
+  policy_regime:
+    nominal_anchor: "inflation" # {inflation, price_level}
+    taylor_rule_inertia: true
+
+  flags:
+    two_asset: true
+    financial_intermediary: true
+    track_price_level: false # keep false in baseline
+    disaster_module: true
+
+  modeling_choices:
+    labor_market: "fixed" # {fixed, endogenous}
+    household_income_model: "exogenous_z_scaled" # z scaled by aggregate income index
+
+  notes_scope: >
+    Two-asset HANK household block (liquid b + illiquid a) with adjustment friction.
+    Disaster module separates risk regime (pD) from realization strike (sD).
+    Financial intermediary enabled; core financial state variable is N (net worth).
+    Baseline nominal anchor is inflation targeting; price level tracked only if needed.
+
+  ssj:
+    enabled: true
+    linearization_environment:
+      disaster_strike: "off" # enforce sD_t = 0 in SSJ runs
+      disaster_risk_regime: "low" # fix pD to low in SSJ runs (regime switching handled in nonlinear runs)
+    unknown_sequence_order: ["y", "pi", "i", "q", "spread"]
+    residual_order: ["goods", "nkpc", "taylor", "investment", "finance"]
+
+# -------------------------------------------------------------------
+# Exogenous stochastic objects
+# -------------------------------------------------------------------
+processes:
+  P_z:
+    type: "markov_chain"
+    meaning: "Idiosyncratic income/employment/productivity process"
+    discretization:
+      method: "rouwenhorst"
+      n: 5
+      params:
+        rho: { param_ref: "rho_z" }
+        sigma: { param_ref: "sigma_z" }
+      normalization:
+        kind: "levels_mean_one"
+    objects:
+      transition_matrix: { derived: "from_discretization" }
+      stationary_dist: { derived: "from_transition_matrix" }
+
+  A_exo:
+    type: "ar1_log"
+    meaning: "Aggregate TFP (log AR(1))"
+    params:
+      rho: { param_ref: "rho_A" }
+      sigma: { param_ref: "sigma_A" }
+    shock:
+      name: "e_A"
+      type: "innovation"
+
+  monetary_shock:
+    type: "iid_normal"
+    meaning: "Monetary policy innovation entering the Taylor rule"
+    params:
+      sigma: { param_ref: "sigma_i" }
+    shock:
+      name: "e_i"
+      type: "innovation"
+
+  P_pD:
+    type: "markov_chain"
+    enabled_if:
+      flag: "disaster_module"
+      equals: true
+    meaning: "Disaster-risk regime transition"
+    discretization:
+      method: "custom_matrix"
+      n: 2
+      state_labels: ["low", "high"]
+    objects:
+      transition_matrix: { param_ref: "P_pD_matrix" }
+      stationary_dist: { derived: "from_transition_matrix" }
+
+# -------------------------------------------------------------------
+# Household idiosyncratic state vector
+# -------------------------------------------------------------------
+household_states:
+  b:
+    type: "state"
+    meaning: "Liquid assets / bond holdings"
+    timing:
+      predetermined_at: "t"
+      choice_at_t: "b_next = b_{t+1}"
+    domain:
+      min: { param_ref: "b_min" }
+      max: { param_ref: "b_max" }
+      constraint: "b >= b_min"
+    grid:
+      n: 180
+      method: "curved"
+      params:
+        curvature: { param_ref: "curv_b" }
+      notes: "Dense near borrowing constraint."
+    transition:
+      source: "policy_function"
+      depends_on:
+        ["b", "z", "a", "aggregate_prices", "aggregate_income", "shocks"]
+
+  z:
+    type: "state"
+    meaning: "Idiosyncratic income component (scaled by aggregate income index)"
+    timing:
+      predetermined_at: "t"
+    domain:
+      kind: "finite_markov"
+      n: 5
+      labels: ["z1", "z2", "z3", "z4", "z5"]
+    grid:
+      values_ref: { derived_from_process: "P_z" }
+    transition:
+      source: "markov_chain"
+      process_ref: "P_z"
+    notes: "With fixed labour, household income is z * income_scale_t (plus transfers/profits as modeled)."
+
+  a:
+    type: "state"
+    enabled_if:
+      flag: "two_asset"
+      equals: true
+    meaning: "Illiquid asset (capital-like / wealth channel)"
+    timing:
+      predetermined_at: "t"
+      choice_at_t: "a_next = a_{t+1}"
+    domain:
+      min: { param_ref: "a_min" }
+      max: { param_ref: "a_max" }
+      constraint: "a >= a_min"
+    grid:
+      n: 60
+      method: "curved"
+      params:
+        curvature: { param_ref: "curv_a" }
+    transition:
+      source: "illiquid_accumulation_with_adjustment"
+      frictions:
+        kind: "transaction_cost"
+        params:
+          adj_cost: { param_ref: "phi_a" }
+      depends_on:
+        ["a", "b", "z", "aggregate_prices", "aggregate_income", "shocks"]
+
+# -------------------------------------------------------------------
+# Aggregate states (predetermined) and jump variables (equilibrium)
+# -------------------------------------------------------------------
+aggregate_states:
+  i_lag:
+    type: "state"
+    enabled_if:
+      field: "meta.policy_regime.taylor_rule_inertia"
+      equals: true
+    meaning: "Lagged nominal policy rate (interest-rate smoothing state)"
+    timing:
+      predetermined_at: "t"
+      law_of_motion: "i_lag_{t+1} = i_t"
+    domain:
+      kind: "real"
+    transition:
+      source: "identity_update"
+      depends_on: ["i"]
+
+  A:
+    type: "state"
+    meaning: "Aggregate TFP level"
+    timing:
+      predetermined_at: "t"
+    transition:
+      source: "exo_process"
+      process_ref: "A_exo"
+
+  K:
+    type: "state"
+    meaning: "Aggregate capital stock"
+    timing:
+      predetermined_at: "t"
+      law_of_motion: "K_{t+1} = (1-δ)K_t + I_t - damage_K(sD_t,K_t)"
+    domain:
+      min: { param_ref: "K_min" }
+      max: { param_ref: "K_max" }
+      constraint: "K >= K_min"
+    transition:
+      source: "capital_accumulation"
+      depends_on: ["K", "I"]
+      optional_depends_on:
+        enabled_if:
+          flag: "disaster_module"
+          equals: true
+        depends_on: ["sD", "damage_K"]
+
+  N:
+    type: "state"
+    enabled_if:
+      flag: "financial_intermediary"
+      equals: true
+    meaning: "Intermediary net worth / equity"
+    timing:
+      predetermined_at: "t"
+      law_of_motion: "N_{t+1} = f(N_t, returns_t, payouts_t, losses_t)"
+    domain:
+      min: { param_ref: "N_min" }
+      max: { param_ref: "N_max" }
+      constraint: "N >= N_min"
+    transition:
+      source: "bank_balance_sheet"
+      depends_on: ["N", "returns", "spread", "A", "K"]
+      optional_depends_on:
+        enabled_if:
+          flag: "disaster_module"
+          equals: true
+        depends_on: ["sD"]
+    notes: >
+      Baseline: disasters affect N via returns/valuation through A and K.
+      Avoid direct N shocks unless you explicitly model extra financial disruption.
+
+aggregate_jumps:
+  pi:
+    type: "jump"
+    enabled_if:
+      field: "meta.policy_regime.nominal_anchor"
+      equals: "inflation"
+    meaning: "Inflation rate (NKPC anchor)"
+    timing:
+      determined_at: "t"
+    determined_by: ["NKPC", "goods_market_clearing", "policy_rule"]
+
+  i:
+    type: "jump"
+    meaning: "Nominal policy rate"
+    timing:
+      determined_at: "t"
+    determined_by: ["Taylor_rule", "monetary_shock"]
+
+  q:
+    type: "jump"
+    meaning: "Tobin's q (investment adjustment-cost block)"
+    timing:
+      determined_at: "t"
+    determined_by: ["investment_block"]
+
+  spread:
+    type: "jump"
+    enabled_if:
+      flag: "financial_intermediary"
+      equals: true
+    meaning: "Credit spread (equilibrium object pinned down by finance block)"
+    timing:
+      determined_at: "t"
+    determined_by: ["finance_block"]
+
+# -------------------------------------------------------------------
+# Disaster module
+# -------------------------------------------------------------------
+disaster_states:
+  pD:
+    type: "state"
+    enabled_if:
+      flag: "disaster_module"
+      equals: true
+    meaning: "Disaster risk regime (persistent)"
+    timing:
+      predetermined_at: "t"
+    domain:
+      kind: "finite_markov"
+      n: 2
+      labels: ["low", "high"]
+    transition:
+      source: "markov_chain"
+      process_ref: "P_pD"
+
+  sD:
+    type: "shock"
+    enabled_if:
+      flag: "disaster_module"
+      equals: true
+    meaning: "Disaster realization indicator"
+    timing:
+      realized_at: "t"
+    domain:
+      kind: "bernoulli"
+      support: [0, 1]
+    transition:
+      source: "conditional_bernoulli"
+      condition_on: "pD"
+      hazard:
+        low: { param_ref: "p_disaster_low" }
+        high: { param_ref: "p_disaster_high" }
+
+disaster_impacts:
+  damage_A:
+    enabled_if:
+      flag: "disaster_module"
+      equals: true
+    meaning: "TFP loss wedge applied when sD=1"
+    applied_to: ["A"]
+    timing: "apply_after_exo_update" # {apply_after_exo_update, apply_as_innovation}
+    functional_form: "A_t <- A_t * (1 - xi_A*sD_t)"
+    params:
+      xi_A: { param_ref: "xi_A" }
+
+  damage_K:
+    enabled_if:
+      flag: "disaster_module"
+      equals: true
+    meaning: "Capital destruction applied when sD=1"
+    applied_to: ["K"]
+    timing: "in_K_law_of_motion"
+    functional_form: "K_{t+1} subtracts xi_K*sD_t*K_t (or equivalent)"
+    params:
+      xi_K: { param_ref: "xi_K" }
+
+# -------------------------------------------------------------------
+# Derived objects (not in the state vector)
+# -------------------------------------------------------------------
+derived_objects:
+  y:
+    type: "derived"
+    meaning: "Output"
+
+  C:
+    type: "derived"
+    meaning: "Aggregate consumption"
+
+  I:
+    type: "derived"
+    meaning: "Aggregate investment"
+
+  income_scale:
+    type: "derived"
+    meaning: "Aggregate income index scaling idiosyncratic z (fixed labour closure)"
+
+  r:
+    type: "derived"
+    meaning: "Real interest rate (Fisher mapping)"
+
+  r_b:
+    type: "derived"
+    meaning: "Liquid asset return (gross or net, per model convention)"
+
+  r_a:
+    type: "derived"
+    enabled_if:
+      flag: "two_asset"
+      equals: true
+    meaning: "Illiquid asset return (gross or net, per model convention)"

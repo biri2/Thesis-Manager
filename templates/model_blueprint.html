@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}Model Blueprint | Thesis Manager{% endblock %}
+
+{% block content %}
+<!-- External Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/model_blueprint.css') }}">
+
+<div class="blueprint-container">
+    <!-- Left Column: Navigation + Controls -->
+    <aside class="blueprint-sidebar">
+        <div class="sidebar-card header-card">
+            <div class="tag">D0.1</div>
+            <h2>Model Blueprint</h2>
+            <p class="model-name">Two-asset HANK + NK + capital + intermediaries + disaster risk</p>
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-tab="scope">
+                <i class="ph ph-compass"></i> Scope
+            </button>
+            <button class="nav-item" data-tab="states">
+                <i class="ph ph-list-bullets"></i> States
+            </button>
+            <button class="nav-item" data-tab="shocks">
+                <i class="ph ph-lightning"></i> Shocks
+            </button>
+            <button class="nav-item" data-tab="timing">
+                <i class="ph ph-clock"></i> Timing
+            </button>
+            <button class="nav-item" data-tab="model-map">
+                <i class="ph ph-tree-structure"></i> Model Map
+            </button>
+            <button class="nav-item" data-tab="consistency">
+                <i class="ph ph-check-circle"></i> Consistency
+            </button>
+        </nav>
+
+        <div class="sidebar-card search-card">
+            <div class="search-box">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="global-search" placeholder="Search across docs...">
+            </div>
+            <div class="search-filters">
+                <span class="filter-chip active" data-filter="all">All</span>
+                <span class="filter-chip" data-filter="symbols">Symbols</span>
+                <span class="filter-chip" data-filter="equations">Math</span>
+            </div>
+            <div id="search-results" class="search-results"></div>
+        </div>
+
+        <div class="sidebar-card download-card">
+            <h3>Downloads</h3>
+            <div class="download-buttons">
+                <button class="btn-download" onclick="downloadFile('scope')"><i class="ph ph-download-simple"></i> Scope (.md)</button>
+                <button class="btn-download" onclick="downloadFile('states')"><i class="ph ph-download-simple"></i> States (.yaml)</button>
+                <button class="btn-download" onclick="downloadFile('shocks')"><i class="ph ph-download-simple"></i> Shocks (.md)</button>
+                <button class="btn-download" onclick="downloadFile('timing')"><i class="ph ph-download-simple"></i> Timing (.md)</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Right Column: Content Viewer -->
+    <main class="blueprint-content">
+        <div id="scope-view" class="tab-content active">
+            <div class="content-header">
+                <h1>Model Scope</h1>
+                <div class="key-decisions" id="key-decisions-box">
+                    <!-- Populated by JS -->
+                </div>
+                <div id="exclusions-box" class="exclusions-card">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div id="scope-md" class="markdown-body"></div>
+        </div>
+
+        <div id="states-view" class="tab-content active">
+            <div class="states-layout">
+                <div class="states-main">
+                    <h1>Model Structural Index</h1>
+                    <p class="section-desc">The "typed dictionary" of the model: states, jumps, and stochastic processes.</p>
+                    
+                    <div id="states-cards" class="states-grid">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div id="states-yaml-container" class="yaml-viewer hidden">
+                        <div class="yaml-header" style="justify-content: flex-start; gap: 20px;">
+                            <span class="active-view-tab" id="tab-tree" onclick="toggleYamlView('tree')">Tree View</span>
+                            <span id="tab-raw" onclick="toggleYamlView('raw')">Raw YAML</span>
+                            <button class="btn-icon" style="margin-left: auto;" onclick="copyYamlPath()"><i class="ph ph-copy"></i> Copy Path</button>
+                        </div>
+                        <div id="yaml-tree-view" class="tree-view"></div>
+                        <pre id="yaml-raw-view" class="hidden"><code class="language-yaml" id="states-yaml-raw"></code></pre>
+                    </div>
+                </div>
+
+                <!-- Right Side: Info Panel -->
+                <aside id="variable-info-panel" class="variable-info-panel">
+                    <div class="panel-placeholder" id="panel-placeholder">
+                        <i class="ph ph-cursor-click"></i>
+                        <p>Click a variable to view its structural metadata</p>
+                    </div>
+                    <div id="panel-content" class="panel-content hidden">
+                        <div class="panel-header">
+                            <h2 id="panel-var-name">Variable</h2>
+                            <span id="panel-var-type" class="badge">Type</span>
+                        </div>
+                        
+                        <div class="panel-body">
+                            <div class="metadata-item">
+                                <label>Timing</label>
+                                <p id="panel-var-timing">-</p>
+                            </div>
+                            <div class="metadata-item">
+                                <label>Domain / Support</label>
+                                <code id="panel-var-domain">-</code>
+                            </div>
+                            <div class="metadata-item">
+                                <label>Meaning</label>
+                                <p id="panel-var-meaning">-</p>
+                            </div>
+                            <div class="metadata-item">
+                                <label>Used in</label>
+                                <p id="panel-var-used">-</p>
+                            </div>
+                            <div id="panel-var-notes-box" class="metadata-item">
+                                <label>Notes</label>
+                                <p id="panel-var-notes">-</p>
+                            </div>
+                        </div>
+
+                        <div class="panel-footer">
+                            <button class="btn-panel-link" onclick="jumpToTab('timing')">
+                                <i class="ph ph-clock"></i> View in Timing
+                            </button>
+                            <button id="btn-view-shock" class="btn-panel-link" onclick="jumpToTab('shocks')">
+                                <i class="ph ph-lightning"></i> View in Shocks
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+        <div id="shocks-view" class="tab-content">
+            <h1>Exogenous Shocks</h1>
+            <div id="shocks-summary" class="shocks-summary">
+                <!-- Populated by JS -->
+            </div>
+            <div id="shocks-md" class="markdown-body"></div>
+        </div>
+
+        <div id="timing-view" class="tab-content">
+            <div class="timing-header-row">
+                <h1>Timing & Sequence</h1>
+                <div class="timing-legend">
+                    <span class="legend-item"><i class="ph ph-circle-fill state-dot"></i> State</span>
+                    <span class="legend-item"><i class="ph ph-record jump-dot"></i> Jump</span>
+                    <span class="legend-item"><i class="ph ph-lightning shock-dot"></i> Shock</span>
+                    <span class="legend-item"><i class="ph ph-arrows-clockwise process-dot"></i> Process</span>
+                </div>
+            </div>
+            
+            <div class="timing-symbol-groups">
+                <div class="symbol-category">
+                    <span class="category-label">🟦 Predetermined states (start of t)</span>
+                    <div id="group-states" class="symbol-chips"></div>
+                </div>
+                <div class="symbol-category">
+                    <span class="category-label">🟨 Jump / equilibrium (solved in t)</span>
+                    <div id="group-jumps" class="symbol-chips"></div>
+                </div>
+                <div class="symbol-category">
+                    <span class="category-label">🟪 Shocks & stochastic (realized in t)</span>
+                    <div id="group-shocks" class="symbol-chips"></div>
+                </div>
+                <div class="symbol-category">
+                    <span class="category-label">⚪ Processes (laws of motion)</span>
+                    <div id="group-processes" class="symbol-chips"></div>
+                </div>
+                <div class="symbol-category collapsible" id="derived-category">
+                    <div class="category-header" onclick="toggleDerived()">
+                        <span class="category-label">🔘 Derived / accounting objects (not states)</span>
+                        <i class="ph ph-caret-down" id="derived-caret"></i>
+                    </div>
+                    <div id="group-derived" class="symbol-chips hidden"></div>
+                </div>
+            </div>
+
+            <div id="timing-checklist-container" class="timing-checklist">
+                <h3>Sequence of Updates</h3>
+                <ul id="timing-checklist"></ul>
+            </div>
+            <div id="timing-md" class="markdown-body"></div>
+        </div>
+
+        <div id="model-map-view" class="tab-content">
+            <h1>Model block architecture</h1>
+                <div class="map-controls">
+                    <button class="btn-toggle-map active" onclick="switchMapBranch('general')">General Architecture</button>
+                    <button class="btn-toggle-map" onclick="switchMapBranch('disaster')">Disaster Mechanism</button>
+                    <button class="btn-toggle-map" onclick="switchMapBranch('monetary')">Monetary Policy</button>
+                    <button class="btn-toggle-map" onclick="switchMapBranch('real')">Real & Capital</button>
+                    <button class="btn-toggle-map" onclick="switchMapBranch('finance')">Finance / Amplification</button>
+                </div>
+            <div id="detailed-map-container" class="model-map-full">
+                <!-- SVG map goes here -->
+            </div>
+        </div>
+
+        <div id="consistency-view" class="tab-content">
+            <div class="consistency-header-row">
+                <h1>Consistency Dashboard</h1>
+                <div id="consistency-score" class="score-badge">Checking...</div>
+            </div>
+            
+            <div class="health-summary-cards">
+                <div class="health-card" id="card-integrity">
+                    <i class="ph ph-shield-check"></i>
+                    <div class="health-card-info">
+                        <strong>Structural Integrity</strong>
+                        <span class="status-msg">Analyzing definitions...</span>
+                    </div>
+                </div>
+                <div class="health-card" id="card-coverage">
+                    <i class="ph ph-intersect"></i>
+                    <div class="health-card-info">
+                        <strong>Cross-Doc Coverage</strong>
+                        <span class="status-msg">Verifying links...</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="consistency-section">
+                <h3>Detailed Checks List</h3>
+                <div id="health-checks" class="health-checks-list"></div>
+            </section>
+
+            <section class="consistency-section">
+                <h3>Global Symbol Naming Map</h3>
+                <p class="section-desc">Unified registry of all specific variables across MD and YAML sources.</p>
+                <div class="table-container sticky-header">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Defined in</th>
+                                <th>Category</th>
+                                <th>Timing</th>
+                                <th>Used in</th>
+                            </tr>
+                        </thead>
+                        <tbody id="naming-map-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>Model Pipeline Visual</h3>
+                    <div class="map-controls flash-card-controls" style="display: flex; gap: 8px;">
+                        <button class="btn-control" onclick="adjustPipelineZoom(0.1)" title="Zoom In"><i class="ph ph-plus"></i></button>
+                        <button class="btn-control" onclick="adjustPipelineZoom(-0.1)" title="Zoom Out"><i class="ph ph-minus"></i></button>
+                        <button class="btn-control" onclick="resetPipelineView()" title="Reset View"><i class="ph ph-arrows-out"></i></button>
+                        <button class="btn-toggle-map" onclick="renderPipelineVisual()" style="font-size: 0.8rem; padding: 4px 12px;">
+                            <i class="ph ph-arrows-clockwise"></i> Reload
+                        </button>
+                    </div>
+                </div>
+                <div id="pipeline-visual-wrapper" style="width: 100%; height: 500px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; position: relative; background: #0f172a;">
+                    <div id="pipeline-visual-container" class="pipeline-visual" style="transform-origin: 0 0; cursor: grab; width: 100%; height: 100%;">
+                        <!-- SVG injected here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/model_blueprint.js') }}"></script>
+{% endblock %}

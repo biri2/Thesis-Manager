@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{% block title %}Thesis Manager{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="wrap">
+            <div class="header-inner">
+                <div>
+                    <h1>
+                        <i class="ph ph-graduation-cap" style="color:var(--accent-primary)"></i>
+                        Thesis Manager
+                        <span style="font-weight:400; opacity:0.5; font-size:0.9em; margin-left:10px;">v1.0</span>
+                    </h1>
+                    <div class="nav">
+                        <a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">
+                            <i class="ph ph-house"></i> Home
+                        </a>
+                        <a href="{{ url_for('progress') }}"
+                            class="{% if request.endpoint == 'progress' %}active{% endif %}">
+                            <i class="ph ph-trend-up"></i> Progress
+                        </a>
+                        <a href="{{ url_for('calendar') }}"
+                            class="{% if request.endpoint == 'calendar' %}active{% endif %}">
+                            <i class="ph ph-calendar-check"></i> Calendar
+                        </a>
+                        <a href="{{ url_for('reading_list') }}"
+                            class="{% if request.endpoint == 'reading_list' %}active{% endif %}">
+                            <i class="ph ph-books"></i> Reading List
+                        </a>
+                        <a href="{{ url_for('models') }}"
+                            class="{% if request.endpoint == 'models' %}active{% endif %}">
+                            <i class="ph ph-graph"></i> Models
+                        </a>
+                        <a href="{{ url_for('data_matrix') }}"
+                            class="{% if request.endpoint == 'data_matrix' %}active{% endif %}">
+                            <i class="ph ph-database"></i> Data
+                        </a>
+                        <a href="{{ url_for('thesis') }}"
+                            class="{% if request.endpoint == 'thesis' %}active{% endif %}">
+                            <i class="ph ph-scroll"></i> Thesis
+                        </a>
+                        <a href="{{ url_for('model_blueprint') }}"
+                            class="{% if request.endpoint == 'model_blueprint' %}active{% endif %}">
+                            <i class="ph ph-compass"></i> Blueprint
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="wrap">
+            Thesis Manager &copy; 2025 — Built with Flask, HANK & ☕
+        </div>
+    </footer>
+
+    <script>
+        // Set default theme to dark
+        document.documentElement.setAttribute('data-theme', 'dark');
+    </script>
+</body>
+
+</html>

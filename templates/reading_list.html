@@ -1,0 +1,1297 @@
+{% extends "base.html" %}
+
+{% block title %}Reading List | Thesis Manager{% endblock %}
+
+{% block content %}
+<section class="controls-section" style="margin-bottom: 20px;">
+    <div class="legend">
+        <span class="pill"><span class="dot core"></span><b>CORE</b> (must master)</span>
+        <span class="pill"><span class="dot high"></span><b>HIGH</b> (strongly recommended)</span>
+        <span class="pill"><span class="dot supp"></span><b>SUPPORTING</b> (selective)</span>
+        <span class="pill"><span class="dot opt"></span><b>OPTIONAL</b> (extension/appendix)</span>
+        <span class="pill"><span class="mono">D0–D7</span> map to your thesis deliverables</span>
+    </div>
+
+    <div class="controls">
+        <div class="control-card">
+            <div class="control-row">
+                <div style="flex:1">
+                    <div class="search">
+                        <input id="q" type="search"
+                            placeholder="Search papers (title, authors, year, tags, deliverables)..." />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-card">
+            <div class="control-row">
+                <div class="toggle-group">
+                    <label class="toggle"><input type="checkbox" id="f_core" checked /> <strong>CORE</strong></label>
+                    <label class="toggle"><input type="checkbox" id="f_high" checked /> <strong>HIGH</strong></label>
+                    <label class="toggle"><input type="checkbox" id="f_supp" checked /> SUPP</label>
+                    <label class="toggle"><input type="checkbox" id="f_opt" checked /> OPT</label>
+                </div>
+                <!-- New Deliverable Filters -->
+                <div class="toggle-group" style="padding-left:10px; border-left:1px solid var(--border);">
+                    <small style="color:var(--muted); margin-right:4px;">Deliverables:</small>
+                    <label class="toggle"><input type="checkbox" id="f_d0" /> D0</label>
+                    <label class="toggle"><input type="checkbox" id="f_d1" /> D1</label>
+                    <label class="toggle"><input type="checkbox" id="f_d2" /> D2</label>
+                    <label class="toggle"><input type="checkbox" id="f_d3" /> D3</label>
+                    <label class="toggle"><input type="checkbox" id="f_d4" /> D4</label>
+                    <label class="toggle"><input type="checkbox" id="f_d5" /> D5</label>
+                    <label class="toggle"><input type="checkbox" id="f_d6" /> D6</label>
+                    <label class="toggle"><input type="checkbox" id="f_d7" /> D7</label>
+                </div>
+            </div>
+            <div class="control-row"
+                style="margin-top:8px; border-top:1px solid rgba(255,255,255,0.05); padding-top:8px;">
+                <div class="toggle-group">
+                    <label class="toggle"><input type="checkbox" id="f_unread" /> Show only unread</label>
+                    <label class="toggle"><input type="checkbox" id="f_read" checked /> Show read</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="grid" style="grid-template-columns: 1fr;">
+    <!-- Deliverables legend -->
+    <section class="deliverables">
+        <b>Deliverables:</b>
+        <div class="dl">
+            <span class="chip deliv"><span class="mono">D0</span> Model spec (equations & blocks)</span>
+            <span class="chip deliv"><span class="mono">D1</span> Calibration + empirical targets sheet</span>
+            <span class="chip deliv"><span class="mono">D2</span> Baseline model solved (SS + IRFs)</span>
+            <span class="chip deliv"><span class="mono">D3</span> Banks / financial intermediary module</span>
+            <span class="chip deliv"><span class="mono">D4</span> Climate rare-disaster shock module</span>
+            <span class="chip deliv"><span class="mono">D5</span> Nonlinear experiments + policy rules</span>
+            <span class="chip deliv"><span class="mono">D6</span> Decomposition: inequality vs finance
+                amplification</span>
+            <span class="chip deliv"><span class="mono">D7</span> Optional: NN surrogate + estimation</span>
+        </div>
+    </section>
+
+
+    <!-- TOPIC 1: HANK + Monetary -->
+    <section class="topic" data-topic="t1">
+        <div class="topic-head">
+            <div>
+                <div class="topic-title"><span class="stripe t1"></span>HANK Foundations & Monetary Transmission</div>
+                <p class="topic-desc">
+                    Core inequality/MPC transmission logic and decomposition language. This is your baseline household
+                    block and the foundation for D6.
+                </p>
+            </div>
+            <!-- Badge removed -->
+        </div>
+
+        <div class="papers">
+            <article class="paper-item" id="paper-kaplan_moll_violante_2018"
+                data-tags="core t1 d0 d1 d2 d6 kaplan moll violante hank monetary transmission 2018">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="kaplan_moll_violante_2018" />
+                                    Monetary Policy According to HANK
+                                </p>
+                                <div class="meta">Greg Kaplan, Benjamin Moll, Giovanni L. Violante — 2018</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip core">CORE</span>
+                                <span class="chip deliv">D0</span><span class="chip deliv">D1</span><span
+                                    class="chip deliv">D2</span><span class="chip deliv">D6</span>
+                            </div>
+                        </div>
+                        <p class="desc">This paper establishes the core HANK view of monetary transmission: heterogeneity and incomplete markets imply that policy works mainly through income, redistribution, and general-equilibrium effects, not the representative-agent intertemporal substitution channel. It rationalizes large MPCs and realistic wealth distributions.</p>
+                        <div class="actions">
+                            <a href="/literature/HANK_Monetary/Monetary Policy According to HANK.pdf" target="_blank"
+                                class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Kaplan, Moll, and Violante reframe monetary policy transmission in economies where households face idiosyncratic risk and incomplete insurance. In a representative-agent NK model, the main force is intertemporal substitution: changes in real rates shift consumption by altering Euler equations. In HANK, that channel is typically small because many households are near borrowing constraints or hold portfolios that make them insensitive to marginal interest rate changes. Instead, policy affects the economy through (i) income and employment (aggregate demand and labor demand), (ii) redistribution across households with different balance sheets (borrowers vs savers; high- vs low-MPC groups), and (iii) general-equilibrium feedbacks that change wages, profits, and asset prices. The key takeaway is methodological and quantitative: once you match realistic heterogeneity, the “who is affected” matters as much as “the average agent.” For your thesis, this paper provides the intellectual foundation to interpret climate disaster shocks and monetary responses: disasters shift incomes and constraints unevenly, and monetary stabilization will redistribute purchasing power across the wealth distribution. It also gives you a clean benchmark to validate your HANK block before introducing financial intermediaries and rare-disaster nonlinearity.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D0 (Model spec):</strong> the baseline household heterogeneity logic; which channels matter in HANK.</li>
+                                <li><strong>D1 (Calibration targets):</strong> discipline via wealth distribution and MPC moments (liquid constraints, marginal propensities).</li>
+                                <li><strong>D2 (Baseline validation):</strong> qualitative IRFs and transmission patterns to replicate before adding climate/banks.</li>
+                                <li><strong>D6 (Decomposition):</strong> a template for attributing aggregate effects to distributional channels.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-auclert_2019_redistribution" data-tags="high t1 d0 d6 auclert redistribution channel 2019 monetary policy">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="auclert_2019_redistribution" />
+                                    Monetary Policy and the Redistribution Channel
+                                </p>
+                                <div class="meta">Adrien Auclert — 2019</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D0</span><span class="chip deliv">D6</span>
+                            </div>
+                        </div>
+                        <p class="desc">Auclert provides a structured decomposition of monetary policy effects into redistribution channels—how interest rate changes reallocate resources across borrowers/savers and across agents with different portfolios, MPCs, and exposures. It turns “heterogeneity matters” into measurable components usable in quantitative work.</p>
+                        <div class="actions">
+                            <a href="/literature/HANK_Monetary/Monetary Policy and the Redistribution Channel.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Auclert’s contribution is to make redistribution a first-class object in monetary analysis. In heterogeneous-agent settings, a change in nominal (and hence real) interest rates affects agents differently depending on their net nominal positions (debt vs assets), the maturity structure of portfolios, and their sensitivity of consumption to income (MPC). Auclert organizes these effects into interpretable components that connect individual balance sheets to aggregate outcomes. Conceptually, the paper clarifies that policy is not just “lower rates stimulate spending” via a representative Euler equation; policy also changes who receives resources—through interest payments, valuation effects, and wage/profit responses—and those distributional shifts can be expansionary or contractionary depending on which groups have higher MPCs. For your thesis, this is directly useful once you introduce climate rare disasters: disasters can push more households toward liquidity constraints and raise the aggregate MPC, so the redistribution channel becomes stronger and more state-dependent. Auclert’s decomposition helps you write the results section with precision: you can explain whether monetary policy stabilizes primarily by boosting labor income, by reallocating resources toward high-MPC households, or by affecting asset valuations that matter for constrained groups. In short, it’s your “interpretation toolkit” for D6.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D0 (Model spec):</strong> channel taxonomy (who gains/loses when rates move; why MPC heterogeneity amplifies).</li>
+                                <li><strong>D2 (Baseline validation):</strong> interpret HANK monetary IRFs beyond “aggregate demand falls.”</li>
+                                <li><strong>D6 (Decomposition):</strong> explicit accounting framework to attribute amplification to redistribution vs other channels.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-kaplan_violante_weidner_2014_h2m"
+                data-tags="high t1 d1 kaplan violante weidner wealthy hand-to-mouth 2014 mpc liquid illiquid">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="kaplan_violante_weidner_2014_h2m" />
+                                    The Wealthy Hand-to-Mouth
+                                </p>
+                                <div class="meta">Greg Kaplan, Giovanni L. Violante, Justin Weidner — 2014</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D1</span>
+                            </div>
+                        </div>
+                        <p class="desc">This paper documents that many households with substantial net worth still behave “hand-to-mouth” because wealth is illiquid. The liquid/illiquid asset split generates high MPCs even among asset holders and reshapes how fiscal and monetary policies transmit in HANK models.</p>
+                        <div class="actions">
+                            <a href="/literature/HANK_Monetary/The Wealthy Hand-to-Mouth.pdf" target="_blank"
+                                class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Kaplan, Violante, and Weidner show that “wealthy” in net worth is not the same as “liquid.” Many households hold significant illiquid assets (housing, retirement accounts, business equity) while maintaining low liquid balances (cash, checking). As a result, they cannot smoothly respond to shocks by adjusting consumption based on lifetime resources; they respond like hand-to-mouth households in the short run because the marginal dollar of liquid resources is scarce. This observation resolves a key empirical puzzle: why measured MPCs are high even though aggregate wealth is large. It also motivates HANK model structures that distinguish liquid and illiquid assets (or, more generally, enforce effective liquidity constraints). For your thesis, this paper is essential as an empirical anchor: climate disasters and associated financial stress can tighten liquidity, increase the share of constrained households, and raise the aggregate MPC—mechanisms that amplify demand contractions. It also informs calibration decisions: the correct object to match is not only total wealth inequality but liquidity inequality and the prevalence of “wealthy hand-to-mouth” behavior. That discipline is critical if you want your disaster amplification results to be credible rather than driven by arbitrary heterogeneity choices.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D1 (Calibration targets):</strong> liquid wealth distributions, fraction hand-to-mouth, MPC by liquid wealth bins.</li>
+                                <li><strong>D0 (Model spec):</strong> motivation for liquidity constraints/portfolio structure (liquid vs illiquid assets).</li>
+                                <li><strong>D2 (Validation):</strong> sanity checks: your model should reproduce high MPCs consistent with liquidity scarcity.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- TOPIC 2: Methods (HANK solution + estimation + ML) -->
+    <section class="topic" data-topic="t2">
+        <div class="topic-head">
+            <div>
+                <div class="topic-title"><span class="stripe t2"></span>Methods Spine: Nonlinear Solution,
+                    Sequence-Space, and Estimation</div>
+                <p class="topic-desc">
+                    The feasibility stack: how you solve nonlinear HANK under large shocks, validate it, and
+                    (optionally) add estimation or neural surrogates.
+                </p>
+            </div>
+            <!-- Badge removed -->
+        </div>
+
+        <div class="papers">
+            <article class="paper-item" id="paper-boehl_2024_hank_on_speed"
+                data-tags="core t2 d2 d5 boehl 2024 hank on speed econpizza automatic differentiation nonlinear">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="boehl_2024_hank_on_speed" />
+                                    HANK on Speed: Robust Nonlinear Solutions using AD
+                                </p>
+                                <div class="meta">Gregor Boehl — 2024</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip core">CORE</span>
+                                <span class="chip deliv">D2</span><span class="chip deliv">D5</span>
+                            </div>
+                        </div>
+                        <p class="desc">A practical paper on solving nonlinear HANK models fast and robustly using automatic differentiation and sequence-space Newton methods. It emphasizes implementation details, convergence diagnostics, and computational design choices that make large-shock transition dynamics feasible and reproducible.</p>
+                        <div class="actions">
+                            <a href="/literature/Methods/HANK on Speed- Robust Nonlinear Solutions using Automatic Differentiation.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Boehl’s contribution is to make nonlinear HANK transition dynamics operational rather than aspirational. The key idea is to exploit automatic differentiation (AD) to obtain accurate derivatives (Jacobians) required by Newton-type solvers, while working in “sequence space”: instead of solving point-by-point for time-t variables only, you solve directly for entire time paths that satisfy equilibrium conditions. This approach is particularly well-suited to HANK models because heterogeneity introduces large state objects (distributions) and highly nonlinear feedback loops that can break naive shooting or local-linear methods—especially under large shocks such as rare disasters.</p>
+                            <p>The paper’s value for your thesis is methodological discipline: it pushes you toward a workflow with clear objects (steady state, transition path, residuals), explicit convergence criteria, and robust debugging tools (e.g., checking equilibrium residuals along the path, monitoring dampening/step sizes, and stress-testing solver stability). It also encourages modular model design, where the household block and aggregation are written in a way that the solver can repeatedly evaluate them quickly. For your project, this is the backbone for credible nonlinear disaster counterfactuals and policy-rule experiments.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D2 (Baseline solved):</strong> stable steady state + validated transition solver workflow.</li>
+                                <li><strong>D5 (Nonlinear experiments):</strong> large-shock, state-dependent disaster simulations you can actually run.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-auclert_et_al_2021_ssj"
+                data-tags="core t2 d2 d7 auclert bardozy rognlie straub 2021 sequence-space jacobian estimate hank">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="auclert_et_al_2021_ssj" />
+                                    Using the Sequence-Space Jacobian to Solve HANK Models
+                                </p>
+                                <div class="meta">Adrien Auclert, Bence Bardóczy, Matthew Rognlie, Ludwig Straub — 2021
+                                </div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip core">CORE</span>
+                                <span class="chip deliv">D2</span><span class="chip deliv">D7</span>
+                            </div>
+                        </div>
+                        <p class="desc">Introduces the sequence-space Jacobian (SSJ) method: a fast way to solve and estimate heterogeneous-agent models by computing general-equilibrium impulse responses via Jacobians of sequences. It turns HANK solution and estimation into linear algebra built on block derivatives.</p>
+                        <div class="actions">
+                            <a href="/literature/Methods/Using the Sequence-Space Jacobian to Solve and Estimate Heterogeneous-Agents Models.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>The SSJ framework reframes heterogeneous-agent general equilibrium as a problem of mapping sequences of aggregate shocks into sequences of aggregate outcomes. The technical bottleneck in HANK models is that individual decisions depend on expectations and distributions, which makes “standard” linearization expensive or opaque. Auclert et al. show that you can compute a model’s dynamic response efficiently by assembling Jacobians for each block—households, firms, policy rule—and then solving the resulting system for equilibrium sequences.</p>
+                            <p>Practically, the paper gives you a clear decomposition: (i) compute partial-equilibrium responses of household aggregates to sequences of prices/income (the HA block Jacobians), (ii) compute Jacobians for the remaining GE blocks (Phillips curve, monetary policy, market clearing), and (iii) close the model by solving for sequences that satisfy equilibrium. This is powerful because it both speeds computation and improves transparency: you can inspect which block contributes to which response.</p>
+                            <p>For your thesis, SSJ is valuable even if your final results are nonlinear. It provides a defensible baseline for validation (your HANK block and aggregation should reproduce known linear IRFs), and it supports limited estimation strategies (matching IRFs or moments) without needing to fully simulate nonlinear distributions every time. It also structures how you present your mechanisms in the write-up.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D2 (Baseline solved):</strong> benchmark solution method to validate your implementation and IRFs.</li>
+                                <li><strong>D7 (Optional estimation):</strong> provides a credible route to likelihood/moment-based estimation with heterogeneous agents.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-fv_gq_2020_dsge_estimation"
+                data-tags="high t2 d1 d7 fernandez-villaverde guerron-quintana 2020 estimating dsge advances challenges particle filter bayesian">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="fv_gq_2020_dsge_estimation" />
+                                    Estimating DSGE Models: Recent Advances
+                                </p>
+                                <div class="meta">Jesús Fernández-Villaverde, Pablo Guerrón-Quintana — 2020</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D1</span><span class="chip deliv">D7</span>
+                            </div>
+                        </div>
+                        <p class="desc">A high-level but concrete map of modern DSGE estimation: Bayesian workflows, particle filters, identification issues, computational constraints, and practical pitfalls. It clarifies what “credible estimation” means in practice and why nonlinear models raise new challenges.</p>
+                        <div class="actions">
+                            <a href="/literature/Methods/Estimating DSGE Models- Recent Advances and Future Challenges.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>This paper is the “methodological governance” reference: it helps you design an estimation strategy that is both credible and feasible. Fernández-Villaverde and Guerrón-Quintana review the standard Bayesian DSGE toolkit—priors, likelihood evaluation, MCMC/SMC—and then focus on the two practical constraints that matter most for your project: (1) nonlinearities and occasionally binding constraints (e.g., disaster states, financial constraints, ELB-like features) complicate likelihood evaluation; and (2) high-dimensional state spaces (as in HANK) stress standard filtering and simulation methods.</p>
+                            <p>The paper is particularly useful as a checklist of failure modes: weak identification, overly-informative priors driving results, measurement error and model misspecification, and the trade-off between model richness and estimability. It also emphasizes the need to align data moments with model mechanisms—exactly what you want when calibrating wealth/MPC targets, leverage/spreads, and macro volatilities.</p>
+                            <p>For your thesis, this reference supports a disciplined scope: estimate a small subset of parameters if you can, calibrate the rest, and communicate clearly why. It also helps you justify using modern computational accelerators (e.g., neural surrogates) as practical tools rather than “new econometrics,” aligning with your stated preference to use novel ideas without inventing them.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D1 (Calibration/targets):</strong> helps you justify what you calibrate vs estimate and why.</li>
+                                <li><strong>D7 (Optional estimation):</strong> frames feasible estimation choices and communicates limitations professionally.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-kase_melosi_rottner_2025_nn_hank"
+                data-tags="core t2 d7 kase melosi rottner 2025 estimating nonlinear heterogeneous agent models neural networks">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="kase_melosi_rottner_2025_nn_hank" />
+                                    Estimating Nonlinear HANK Models with Neural Networks
+                                </p>
+                                <div class="meta">Hanno Kase, Leonardo Melosi, Matthias Rottner — 2025</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip core">CORE</span>
+                                <span class="chip deliv">D7</span>
+                            </div>
+                        </div>
+                        <p class="desc">Proposes an “amortized” neural-network approach to solve and estimate nonlinear HANK models globally: parameters enter as inputs to policy functions, enabling fast repeated evaluation for likelihood-based estimation even with strong nonlinearities such as ZLB-like constraints.</p>
+                        <div class="actions">
+                            <a href="/literature/Methods/Estimating Nonlinear Heterogeneous Agent Models with Neural Networks.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Kase–Melosi–Rottner attack the core computational obstacle in nonlinear HANK estimation: you typically need to solve the model repeatedly for many parameter draws, which is prohibitively slow when the model is high-dimensional and nonlinear. Their approach uses neural networks as global approximators of policy functions, with a key twist: structural parameters are treated as additional inputs. This “parameterized policy function” design lets the network learn how optimal decisions change across both states and parameter values, effectively amortizing the cost of solving the model.</p>
+                            <p>Once trained, the network can be used to simulate the economy quickly under many parameter combinations, making likelihood-based or moment-based estimation substantially more feasible. The paper also illustrates how this approach can handle nonlinear features that complicate traditional linearized estimation—exactly the sort of nonlinearity you face with disaster states and financial constraints.</p>
+                            <p>For your thesis, this paper gives you a concrete, defensible path to integrating deep learning without drifting into “novel estimation theory.” You can position the NN as a computational device: it accelerates model evaluation for either (i) limited likelihood-based estimation of a small parameter subset, or (ii) simulated method of moments (SMM) where you match a handful of macro and macro-finance moments. It also helps you define diagnostics: training loss on equilibrium residuals, out-of-sample accuracy across parameter draws, and stability tests around crisis/disaster regimes.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D7 (NN surrogate/estimation):</strong> primary blueprint for your deep-learning layer.</li>
+                                <li><strong>D2/D5 (Computation):</strong> motivates architecture choices that keep nonlinear experiments fast.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-fv_2025_deep_learning_solve"
+                data-tags="high t2 d7 fernandez-villaverde 2025 deep learning solving economic models dsge global solution">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="fv_2025_deep_learning_solve" />
+                                    Deep Learning for Solving Economic Models
+                                </p>
+                                <div class="meta">Jesús Fernández-Villaverde — 2025</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D7</span>
+                            </div>
+                        </div>
+                        <p class="desc">A survey and methodological guide on using deep neural networks to solve DSGE and related macro models globally. It explains why deep learning can mitigate the curse of dimensionality, outlines training strategies, and emphasizes diagnostics and error measurement.</p>
+                        <div class="actions">
+                            <a href="/literature/Methods/Deep Learning for Solving Economic Models.pdf" target="_blank"
+                                class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Fernández-Villaverde’s goal is to translate deep learning from a generic tool into a macro model solution technology. The central argument is pragmatic: many economically relevant models are high-dimensional and nonlinear, and classical solution methods can become infeasible or fragile. Deep networks offer flexible function approximation that can be trained either on simulated solution data (supervised learning) or by minimizing equilibrium residuals directly (equation-error or “physics-informed” style approaches).</p>
+                            <p>For your project, the relevance is twofold. First, it supports the choice of global methods: rare disasters and financial constraints generate state dependence and occasional binding regimes where local linear approximations can be misleading. Second, it helps you design the “surrogate layer” cleanly if you pursue it: define the state vector carefully, choose normalization, ensure training covers the relevant regions of the state space (especially crisis/disaster states), and evaluate accuracy using economic diagnostics (Euler errors, equilibrium residuals, and stability of simulated moments).</p>
+                            <p>This paper also helps you write the methods section with credibility. You can describe deep learning not as “black-box prediction,” but as an approximation to equilibrium objects subject to strict economic constraints. If you keep D7 optional, this reference still strengthens your positioning: your core results rely on modern nonlinear computation, and deep learning is a scalable extension for speeding counterfactuals or enabling limited estimation.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D7 (Optional surrogate):</strong> provides the macro-appropriate DL framing and vocabulary.</li>
+                                <li><strong>D2/D5 (Nonlinear solution narrative):</strong> justifies why global approximations matter under rare disasters and binding constraints.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-maliar_maliar_winant_2021_dl_dynamic"
+                data-tags="supp t2 d7 maliar maliar winant 2021 deep learning dynamic economic models training diagnostics">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="maliar_maliar_winant_2021_dl_dynamic" />
+                                    Deep Learning for Solving Dynamic Economic Models
+                                </p>
+                                <div class="meta">Lilia Maliar, Serguei Maliar, Pablo Winant — 2021</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip supp">SUPPORTING</span>
+                                <span class="chip deliv">D7</span>
+                            </div>
+                        </div>
+                        <p class="desc">A practical guide to implementing deep learning solution methods for dynamic economic models, focusing on training design, normalization, sampling of state spaces, and accuracy diagnostics. It’s especially useful for avoiding common implementation pitfalls in DL-based solvers.</p>
+                        <div class="actions">
+                            <a href="/literature/Methods/Deep Learning for Solving Dynamic Economic Models.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Maliar–Maliar–Winant focus on the engineering realities that determine whether deep learning solution methods work in practice. Even if the conceptual approach is sound, macro models can fail DL training because the state space is poorly sampled, variables are badly scaled, constraints are not enforced, or accuracy is evaluated with metrics that do not correspond to equilibrium quality.</p>
+                            <p>The paper’s key contribution for you is methodological hygiene: it emphasizes normalization of inputs/outputs, careful construction of training samples (including the “rare but important” regions—exactly your disaster/crisis states), and robust diagnostics. Rather than reporting only training loss, it encourages checking economic error metrics such as Euler equation errors, violations of market clearing, and stability of simulated moments. It also discusses the trade-offs between different training regimes (e.g., simulation-based sampling vs grid-like coverage) and the importance of ensuring the approximator generalizes rather than memorizes local regions.</p>
+                            <p>In your thesis, this paper is most valuable if you build a surrogate or NN-based solver (D7). It tells you what to log, what to plot, and how to convince a skeptical reader that your neural approximation is economically meaningful. Even if you do not implement D7, it can inform your “optional extension” section and help you argue that deep learning is feasible and disciplined when used with the right diagnostics.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D7 (Surrogate implementation):</strong> concrete training and diagnostics guidance.</li>
+                                <li><strong>D2/D5 (Reliability):</strong> reinforces how to evaluate solution quality beyond “loss goes down.”</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- TOPIC 3: Climate tail risk + monetary -->
+    <section class="topic" data-topic="t4">
+        <div class="topic-head">
+            <div>
+                <div class="topic-title"><span class="stripe t4"></span>Climate Tail Risk, Rare Disasters & Monetary
+                    Policy Trade-offs</div>
+                <p class="topic-desc">
+                    How disaster risk and realizations change the natural rate, inflation–output trade-offs, and the
+                    effectiveness/cost of stabilization.
+                </p>
+            </div>
+            <!-- Badge removed -->
+        </div>
+
+        <div class="papers">
+            <article class="paper-item" id="paper-cantelmo_2022_rare_disasters"
+                data-tags="core t4 d0 d4 d5 cantelmo 2022 rare disasters natural rate monetary policy">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="cantelmo_2022_rare_disasters" />
+                                    Rare Disasters, the Natural Interest Rate and Monetary Policy
+                                </p>
+                                <div class="meta">Antonio Cantelmo — 2022</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip core">CORE</span>
+                                <span class="chip deliv">D0</span><span class="chip deliv">D4</span><span
+                                    class="chip deliv">D5</span>
+                            </div>
+                        </div>
+                        <p class="desc">Cantelmo studies how rare-disaster risk (even before any disaster occurs) shifts the natural real rate and alters macro dynamics. Disaster probability affects precautionary behavior and equilibrium pricing, changing the monetary policy problem relative to standard New Keynesian environments.</p>
+                        <div class="actions">
+                            <a href="/literature/Climate_Tail_Risk/Rare Disasters, the Natural Interest Rate and Monetary Policy.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>The central idea is that rare disasters introduce a “tail-risk wedge” into macro equilibrium. In standard models, the natural rate and stabilization trade-offs are driven mainly by expected growth and preference shocks with thin tails. When the distribution has a low-probability disaster state, households and firms internalize that future marginal utility may spike in disaster times, increasing precautionary motives and changing asset pricing. Even if the disaster never occurs in-sample, the possibility of a disaster can depress the natural rate and alter equilibrium quantities—especially consumption/saving choices and pricing of risky claims. For monetary policy, this matters because a Taylor-rule designed around normal fluctuations can mis-handle environments where risk premia and precautionary forces move strongly with state variables (e.g., perceived disaster probability). In your thesis, this paper gives you a clean conceptual and quantitative rationale for distinguishing (i) shocks to disaster probability (“risk shocks”) from (ii) disaster realizations (“jump shocks”), and for studying how the optimal (or welfare-improving) degree of inflation stabilization may differ across these cases. It also motivates nonlinear solution methods: the economy’s responses can be highly state-dependent when rare events are present, and linear approximations risk understating both risk effects and policy trade-offs.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D4 (Disaster risk vs realization):</strong> Direct template for your disaster-risk vs disaster-realization distinction.</li>
+                                <li><strong>D5 (Policy experiments):</strong> for policy-rule experiments that separate “risk effects” from “realization effects”.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-kara_thakoor_2023_climate_shocks"
+                data-tags="high t4 d4 d5 kara thakoor 2023 recurrent climate shocks monetary policy design">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="kara_thakoor_2023_climate_shocks" />
+                                    Monetary Policy Design with Recurrent Climate Shocks
+                                </p>
+                                <div class="meta">Gazi Kara, Arvind Thakoor — 2023</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D4</span><span class="chip deliv">D5</span>
+                            </div>
+                        </div>
+                        <p class="desc">Kara and Thakoor model climate disasters as recurrent, largely supply-side disturbances that raise inflation while lowering output, complicating stabilization. They analyze monetary policy rules in a climate-shock environment and show that standard prescriptions can perform poorly as shocks recur.</p>
+                        <div class="actions">
+                            <a href="/literature/Climate_Tail_Risk/Monetary Policy Design with Recurrent Climate Shocks.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>This paper is valuable because it formalizes, in a relatively standard New Keynesian DSGE setting, the core “climate shocks look like adverse supply shocks” intuition: disasters reduce effective productivity or destroy capital, pushing marginal costs up, generating inflationary pressure, while simultaneously depressing output. This creates a sharper inflation–output trade-off than demand-driven downturns and forces the central bank into uncomfortable choices. The “recurrent” aspect matters: even if each shock is temporary, repeated shocks can keep the economy in a near-permanent stabilization problem, making policy design a medium-run issue rather than a one-off response. For your thesis, this paper anchors the climate-monetary narrative: you can reproduce their baseline results as a sanity check and then show how adding household heterogeneity (HANK) changes the demand side (high-MPC households, liquidity constraints) and how adding leveraged intermediation changes investment/spreads. That contrast is exactly your contribution: you do not merely restate the NK trade-off; you explain why it becomes more nonlinear and more state-dependent once distributional demand channels and financial constraints interact with climate shocks. Practically, you can map their climate-shock specification into your D4 module, then replicate their policy-rule comparisons as a benchmark set of figures before moving to the integrated model for D5.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D4 (Climate benchmark):</strong> your RANK/NK climate benchmark.</li>
+                                <li><strong>D5 (Comparison point):</strong> gives a disciplined baseline trade-off to compare against your integrated HANK + finance model.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-fv_levintal_2018_rare_disaster_methods"
+                data-tags="high t4 d4 d5 fernandez-villaverde levintal 2018 solution methods rare disasters">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox"
+                                        data-key="fv_levintal_2018_rare_disaster_methods" />
+                                    Solution Methods for Models with Rare Disasters
+                                </p>
+                                <div class="meta">Jesús Fernández-Villaverde, Oren Levintal — 2018</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D4</span><span class="chip deliv">D5</span>
+                            </div>
+                        </div>
+                        <p class="desc">Fernández-Villaverde and Levintal explain why rare disasters strain standard perturbation methods and can generate large approximation errors. They discuss robust solution strategies for models with low-probability, high-impact states, emphasizing accuracy in tails and regime switching.</p>
+                        <div class="actions">
+                            <a href="/literature/Climate_Tail_Risk/Solution Methods for Models with Rare Disasters.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Rare disasters are a worst-case scenario for local approximation methods: policy functions and equilibrium conditions can be smooth almost everywhere but change sharply in regions of the state space associated with disaster risk or disaster realization. Standard perturbation approaches approximate around a deterministic steady state and can miss (or mis-measure) the contribution of tails to expectations, risk premia, and precautionary dynamics. This paper’s practical contribution is to clarify what fails and why: even if the disaster probability is tiny, the payoffs and marginal utilities in disaster states can be so extreme that they matter for pricing and for equilibrium, making “small probability” not equivalent to “small effect.” For your thesis, this provides the strongest, cleanest rationale for adopting nonlinear tools (e.g., automatic differentiation + Newton methods, sequence-space methods, or global approximations) when you incorporate a disaster regime. It also guides how to implement the disaster process credibly: discrete Markov switching, jump processes, or hybrid schemes, and how to assess approximation quality (e.g., errors in Euler equations, pricing kernels, or tail-state moments). Importantly, it supports your key claim that disaster dynamics are not scaled-up normal shocks—the computational method itself must respect that. In writing, cite it when defending your modeling choice (“rare disasters require methods that remain accurate in tail states”), and in practice, use it as a checklist for diagnostics: do your computed paths respect equilibrium conditions in both normal and disaster regimes?</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D4 (Methods justification):</strong> justification for disaster-state modeling.</li>
+                                <li><strong>D5 (Nonlinear tools):</strong> rationale for using nonlinear/global solution tools.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-bilal_kanzig_global_local_temp"
+                data-tags="high t1 d4 bilal kanzig climate macro impact global vs local temperature empirical">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="bilal_kanzig_global_local_temp" />
+                                    The Macroeconomic Impact of Climate Change
+                                </p>
+                                <div class="meta">Adrien Bilal, Diego R. Känzig — 2025</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D1</span><span class="chip deliv">D4</span>
+                            </div>
+                        </div>
+                        <p class="desc">Bilal and Känzig provide empirical evidence on how temperature measures translate into macroeconomic outcomes, distinguishing global and local temperature variation. Their results discipline the magnitude and persistence of climate-related macro effects and help map climate variables into structural shocks.</p>
+                        <div class="actions">
+                            <a href="/literature/Empirics/The Macroeconomic Impact of Climate Change- Global vs. Local Temperature.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>The main value of this paper for your thesis is empirical discipline. Structural climate DSGEs (and especially rare-disaster climate variants) can be vulnerable to “free calibration”: if you choose disaster size/frequency without strong external evidence, results can look mechanically large or small. Bilal–Känzig help constrain that by quantifying macro responses to temperature changes and by clarifying whether global temperature dynamics or local deviations are the right driver for macro aggregates. This distinction matters for model design: global temperature may proxy for broader climate regimes and correlated global shocks (commodity prices, supply chains, financial conditions), while local temperature captures regional production or sector impacts. In your framework, you can use their estimates to calibrate plausible output losses, inflation pressures, or persistence parameters associated with climate states, and to justify scenario magnitudes in policy experiments. If you implement both “risk” and “realization” channels, the paper can inform both: (i) expected long-run climate deterioration that shifts steady states or natural rates (risk/slow-moving component), and (ii) episodic realized disaster losses (jump component) as an extreme tail of climate outcomes. Even if you do not estimate your full model, you can reference Bilal–Känzig when building your D1 calibration table: “macro damage magnitudes are consistent with empirical responses to temperature measures.” That strengthens credibility with supervisors and makes your quantitative findings harder to dismiss as parameter-driven.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D1 (Calibration anchor):</strong> empirical anchor for shock size and persistence.</li>
+                                <li><strong>D4 (Scenario mapping):</strong> for translating “climate change / temperature” into your disaster/risk calibration scenarios.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-dell_jones_olken_2012_temp_growth"
+                data-tags="supp t4 d1 dell jones olken 2012 temperature shocks economic growth ae j macro">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="dell_jones_olken_2012_temp_growth" />
+                                    Temperature Shocks and Economic Growth
+                                </p>
+                                <div class="meta">Melissa Dell, Benjamin F. Jones, Benjamin A. Olken — 2012</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip supp">SUPPORTING</span>
+                                <span class="chip deliv">D1</span>
+                            </div>
+                        </div>
+                        <p class="desc">Dell, Jones, and Olken document robust empirical links between temperature fluctuations and economic growth using panel evidence. They show that temperature shocks affect output dynamics, with heterogeneity across country income levels, providing foundational evidence that climate variables matter for macro outcomes.</p>
+                        <div class="actions">
+                            <a href="/literature/Empirics/Temperature Shocks and Economic Growth- Evidence from the Last Half Century.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>This paper is a cornerstone of the empirical climate–macro literature because it provides systematic panel evidence that temperature shocks have statistically and economically meaningful effects on output growth. Its appeal for your thesis is not that it identifies rare disasters specifically, but that it supplies a broadly accepted baseline: climate variables are not merely “environmental”; they map into macro aggregates in ways consistent with growth effects and persistence. The paper is particularly useful in your calibration logic because it motivates plausible magnitudes and persistence parameters for climate-related productivity or damages. If you model disasters as large, discrete events, you still need a narrative for how those events relate to the broader empirical evidence on climate variation. Dell–Jones–Olken can serve as the “wide net” citation: temperature affects growth; therefore a structural model that embeds climate states is empirically meaningful. You can then refine the link by layering in more targeted evidence (e.g., specific disaster datasets or newer papers) if needed. Practically, you might use it to justify: (i) the sign of effects (temperature up → output down), (ii) the persistence channel (growth impacts imply longer-run level effects), and (iii) heterogeneity or state dependence (stronger effects in more vulnerable economies can motivate heterogeneous exposures or nonlinearities). Even when your thesis focuses on advanced HANK + finance mechanisms, having at least one widely cited empirical anchor like this improves credibility of your D1 calibration choices.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D1 (Calibration classic):</strong> classic empirical benchmark to justify your climate-damage magnitudes and persistence assumptions.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- TOPIC 4: Financial intermediaries + amplification -->
+    <section class="topic" data-topic="t3">
+        <div class="topic-head">
+            <div>
+                <div class="topic-title"><span class="stripe t3"></span>Financial Intermediation, Spreads &
+                    Macro-Finance Amplification</div>
+                <p class="topic-desc">
+                    Your bank/expert block and the conceptual backbone for “financial amplification” (spreads, leverage
+                    constraints, crises as nonlinear states).
+                </p>
+            </div>
+            <!-- Badge removed -->
+        </div>
+
+        <div class="papers">
+            <article class="paper-item" id="paper-fv_hurtado_nuno_2023_ff_wealth"
+                data-tags="core t3 d0 d3 d5 d6 fernandez-villaverde hurtado nuno 2023 financial frictions wealth distribution">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="fv_hurtado_nuno_2023_ff_wealth" />
+                                    Financial Frictions and the Wealth Distribution
+                                </p>
+                                <div class="meta">Jesús Fernández-Villaverde, Samuel Hurtado, Galo Nuño — 2023</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip core">CORE</span>
+                                <span class="chip deliv">D0</span><span class="chip deliv">D3</span><span
+                                    class="chip deliv">D5</span><span class="chip deliv">D6</span>
+                            </div>
+                        </div>
+                        <p class="desc">A heterogeneous-agent macro-finance model where financial constraints and household wealth heterogeneity jointly generate endogenous risk, leverage cycles, and state-dependent amplification. The key message: crises are nonlinear “bad states” where distributions and balance sheets reshape aggregate dynamics.</p>
+                        <div class="actions">
+                            <a href="/literature/Finance_Intermediation/Financial Frictions and the Wealth Distribution.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>This paper is your closest intellectual ancestor for the thesis’s “double amplification” claim. It formalizes how household wealth distribution and financial frictions interact to produce endogenous aggregate risk and crisis dynamics that cannot be captured by representative-agent linearization. The central mechanism is balance-sheet sensitivity: when intermediaries’ net worth is low, leverage constraints tighten, spreads rise, and risk premia increase—reducing investment and aggregate demand. Because households are heterogeneous, shocks also reallocate income and wealth across agents with different MPCs, changing the strength and persistence of aggregate responses.</p>
+                            <p>For your project, the practical value is twofold. First, it clarifies which macro-financial state variables matter (intermediary net worth, leverage, spreads, risk premia, wealth distribution tails) and how to report them credibly. Second, it provides a disciplined narrative for why climate disasters (tail events) should be studied in a nonlinear environment: disaster realizations push the economy into the region where constraints bind, creating feedback loops between asset values, credit supply, and consumption heterogeneity. In short, it offers both the economic logic and the measurement targets for your amplification exercise.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D0 (Blueprint):</strong> blueprint for integrating heterogeneity with financial frictions.</li>
+                                <li><strong>D3 (Bank block):</strong> intermediary/balance-sheet block design choices and key objects.</li>
+                                <li><strong>D5 (Nonlinear IRFs):</strong> nonlinear, state-dependent impulse responses (crisis vs normal times).</li>
+                                <li><strong>D6 (Decomposition):</strong> conceptual and quantitative template for “double amplification” decomposition.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-gertler_karadi_2011_ump"
+                data-tags="high t3 d3 d5 gertler karadi 2011 unconventional monetary policy intermediary net worth">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="gertler_karadi_2011_ump" />
+                                    A Model of Unconventional Monetary Policy
+                                </p>
+                                <div class="meta">Mark Gertler, Peter Karadi — 2011</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D3</span><span class="chip deliv">D5</span>
+                            </div>
+                        </div>
+                        <p class="desc">A New Keynesian model with a financial intermediary sector subject to an agency/leverage constraint that generates endogenous spreads. It provides a tractable way to model credit frictions and evaluate central bank credit interventions (e.g., asset purchases) through intermediary balance sheets.</p>
+                        <div class="actions">
+                            <a href="/literature/Finance_Intermediation/A Model of Unconventional Monetary Policy.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Gertler–Karadi is the workhorse reference for building a bank/intermediary block that is both structurally motivated and computationally manageable. The key idea is an agency problem: intermediaries cannot fully pledge returns to depositors because they could divert assets, which creates an endogenous leverage constraint tied to intermediary net worth. When a negative shock erodes net worth, the constraint tightens, credit supply contracts, and a spread opens between borrowing and lending rates—amplifying the downturn through investment and demand.</p>
+                            <p>For your thesis, the “bank block” you want can be anchored in this exact structure. It gives you: (i) the minimal state variable that drives amplification (intermediary net worth), (ii) a clean wedge/spread object to track and validate empirically, and (iii) a natural entry point for monetary policy interactions. Even if you do not model full-scale QE/QT, the framework clarifies how standard interest-rate policy can interact with balance sheets: tighter policy reduces asset values and intermediary net worth, which can propagate through spreads. This is precisely the mechanism you need when climate disasters simultaneously destroy productive capacity and stress balance sheets. It also provides a disciplined language for “credit policy” counterfactuals (optional extension) without expanding the model into an unbounded banking sector.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D3 (Implementation):</strong> implementable intermediary net-worth law of motion + leverage constraint.</li>
+                                <li><strong>D5 (Endogenous spreads):</strong> policy experiments where spreads and credit supply respond endogenously.</li>
+                                <li><strong>D1 (Calibration):</strong> calibration guidance for spreads/intermediary leverage persistence.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-gertler_kiyotaki_2010_intermediation"
+                data-tags="high t3 d3 gertler kiyotaki 2010 financial intermediation credit policy business cycle analysis">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="gertler_kiyotaki_2010_intermediation" />
+                                    Financial Intermediation and Credit Policy
+                                </p>
+                                <div class="meta">Mark Gertler, Nobuhiro Kiyotaki — 2010</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D3</span>
+                            </div>
+                        </div>
+                        <p class="desc">A canonical macro-finance framework where constrained intermediaries transmit shocks via balance-sheet capacity. It emphasizes how credit market disruptions generate large real effects and how “credit policy” (lending facilities, asset purchases) can mitigate crises when private intermediation collapses.</p>
+                        <div class="actions">
+                            <a href="/literature/Finance_Intermediation/Financial Intermediation and Credit Policy in Business Cycle Analysis.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>This paper is best viewed as the conceptual backbone behind modern intermediary-based DSGE models. It explains, at a structural level, why intermediation capacity matters: when intermediaries are constrained, they cannot arbitrage away spreads or reallocate savings to productive investment efficiently. Shocks that hit intermediary net worth therefore have first-order effects on credit volumes, investment, and output. Importantly, the paper clarifies that “credit policy” is not a generic fiscal transfer; it is a targeted intervention that relaxes binding private constraints in states where private intermediation is impaired.</p>
+                            <p>In your thesis, you can cite this to justify why climate disasters should not be treated as pure supply shocks. A disaster can simultaneously (i) reduce collateral/asset values and (ii) raise uncertainty, both of which damage intermediation capacity. The result is a credit contraction that can dominate real outcomes, especially when households’ MPC heterogeneity turns financing disruptions into sharp demand shortfalls. Even if you do not implement a rich policy toolkit, the framework helps you interpret results: when your model shows spreads spike and investment collapses after a disaster, you can tie that behavior to a standard intermediation failure logic. It also gives you a disciplined optional extension: compare a baseline Taylor rule-only regime to a regime with limited credit support (kept small-scope).</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D3 (Foundations):</strong> deeper conceptual foundation for intermediary constraints and spreads.</li>
+                                <li><strong>D5 (Crisis policy):</strong> crisis-state policy experiments (credit support vs baseline rule).</li>
+                                <li><strong>D0 (Motivation):</strong> rigorous motivation for modeling intermediation rather than reduced-form wedges.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-bgg_1999_financial_accelerator"
+                data-tags="high t3 d3 d6 bernanke gertler gilchrist 1999 financial accelerator external finance premium">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="bgg_1999_financial_accelerator" />
+                                    The Financial Accelerator
+                                </p>
+                                <div class="meta">Ben Bernanke, Mark Gertler, Simon Gilchrist — 1999</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D3</span><span class="chip deliv">D6</span>
+                            </div>
+                        </div>
+                        <p class="desc">The classic “financial accelerator”: firms’/entrepreneurs’ balance sheets affect borrowing costs via an external finance premium. Shocks that reduce net worth raise spreads, cut investment, and amplify business cycles. It provides a clean, widely accepted amplification benchmark.</p>
+                        <div class="actions">
+                            <a href="/literature/Finance_Intermediation/The Financial Accelerator in a Quantitative Business Cycle Framework.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>BGG is the canonical reference for turning balance sheets into macro amplification. The mechanism is simple and powerful: borrowers’ net worth determines the severity of agency problems in lending, which determines an external finance premium. When net worth falls—due to an adverse shock—borrowing becomes more expensive relative to the risk-free rate, investment declines, and output falls. This decline further depresses net worth, creating a feedback loop that amplifies and prolongs downturns.</p>
+                            <p>For your thesis, BGG plays two roles. First, it provides a widely recognized language and benchmark for any spread-based amplifier. Even if you implement a modern intermediary model (Gertler–Karadi style), reviewers and supervisors often want to see how your “spread” object relates to the traditional external finance premium. Second, it gives you a practical fallback: if the full intermediary block becomes too complex in the early stages, you can implement a BGG-style wedge as an intermediate milestone while preserving the finance amplification logic for D5 and D6. Conceptually, climate disasters are exactly the kind of shock that can erode borrower net worth and collateral values. In a HANK setting, that investment contraction interacts with high-MPC households, strengthening the demand-side propagation. BGG therefore helps you articulate the finance component of your decomposition in a clean, defensible way.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D3 (Fallback):</strong> fallback reduced-form spread wedge if intermediary modeling becomes heavy.</li>
+                                <li><strong>D6 (Benchmark):</strong> clean decomposition benchmark for “how much amplification comes from finance”.</li>
+                                <li><strong>D1 (Calibration):</strong> calibration targets for external finance premium dynamics.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-kiyotaki_moore_1997_credit_cycles"
+                data-tags="supp t3 d3 kiyotaki moore 1997 credit cycles collateral constraints asset prices">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="kiyotaki_moore_1997_credit_cycles" />
+                                    Credit Cycles
+                                </p>
+                                <div class="meta">Nobuhiro Kiyotaki, John Moore — 1997</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip supp">SUPPORTING</span>
+                                <span class="chip deliv">D3</span>
+                            </div>
+                        </div>
+                        <p class="desc">A foundational collateral-constraint model where asset values determine borrowing capacity, generating powerful amplification and persistence. Negative shocks reduce collateral prices, tighten constraints, depress investment/output, and further reduce asset prices—creating a self-reinforcing “credit cycle.”</p>
+                        <div class="actions">
+                            <a href="/literature/Finance_Intermediation/Credit Cycles.pdf" target="_blank"
+                                class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Kiyotaki–Moore is the cleanest theoretical articulation of why macro-financial dynamics are inherently feedback-driven. The core structure is a collateral constraint: borrowers can only pledge a fraction of the future value of an asset (often “land” in the original setup). As a result, the asset’s market price determines current borrowing capacity. When a negative shock hits, the price of collateral falls, which tightens constraints, forcing borrowers to cut spending or sell assets—putting further downward pressure on prices. This generates amplification (bigger output response than the shock alone) and persistence (effects last longer because balance sheets recover slowly).</p>
+                            <p>In your thesis context, this is directly relevant for climate disasters because disasters can destroy physical capital, reduce expected productivity, and increase risk—each of which can lower the market value of collateral and trigger constraint tightening. Even if you do not explicitly model collateralized lending, the Kiyotaki–Moore logic helps interpret “why spreads spike” and “why recovery is slow” in your simulations: the economy’s capacity to finance investment is endogenously tied to asset valuations that move with the shock. When combined with heterogeneous households, the forced deleveraging/asset price channel can translate into a sharp demand contraction because constrained, high-MPC agents reduce consumption strongly. This reference is therefore a high-quality theoretical anchor for the “nonlinear amplification” narrative in your results section.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D3 (Rationale):</strong> intuition and structural rationale for collateral/leverage constraints.</li>
+                                <li><strong>D5 (State dependence):</strong> state dependence and nonlinear feedback loops under disaster shocks.</li>
+                                <li><strong>D0 (Motivation):</strong> motivation for modeling balance sheets as endogenous state variables.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-brunnermeier_sannikov_2014"
+                data-tags="supp t3 d5 brunnermeier sannikov 2014 macroeconomic model financial sector nonlinear crises">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="brunnermeier_sannikov_2014" />
+                                    A Macroeconomic Model with a Financial Sector
+                                </p>
+                                <div class="meta">Markus Brunnermeier, Yuliy Sannikov — 2014</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip supp">SUPPORTING</span>
+                                <span class="chip deliv">D5</span>
+                            </div>
+                        </div>
+                        <p class="desc">A nonlinear macro-finance model where “experts” (financial intermediaries) absorb risk but are constrained by net worth. Endogenous risk rises in bad times; crises are not scaled-up recessions. The model delivers strong state dependence and crisis amplification.</p>
+                        <div class="actions">
+                            <a href="/literature/Finance_Intermediation/A Macroeconomic Model with a Financial Sector.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Brunnermeier–Sannikov is the reference for taking nonlinearity seriously in macro-finance. The economy features specialized intermediaries (“experts”) who hold risky assets because they are better at managing them. However, experts are constrained by net worth: when their net worth falls, their ability to hold risky assets and provide intermediation collapses. This changes equilibrium asset prices and risk premia endogenously. Crucially, risk is endogenous and countercyclical: in bad times, experts are weak, prices become more sensitive, and small shocks can have disproportionately large effects—creating crisis dynamics that cannot be captured by local linear approximations.</p>
+                            <p>For your thesis, the paper is valuable as a conceptual and narrative anchor. Climate disasters are tail events that can push the economy into precisely the region where intermediary net worth constraints bind and endogenous risk spikes. That gives you a defensible reason to emphasize nonlinear solution methods and state dependence (D5). It also strengthens the interpretation of your simulation results: if you show that disasters have convex effects (much larger output losses when leverage is high or net worth is low), you can connect it directly to the “crises are different” logic formalized here. Even if your implemented bank block follows a more NK-DSGE style, Brunnermeier–Sannikov provides the theoretical legitimacy for the overarching amplification story.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D5 (Nonlinear theory):</strong> theoretical justification for nonlinear, state-dependent disaster analysis.</li>
+                                <li><strong>D3 (State variables):</strong> conceptual guidance for expert/intermediary net-worth state variable.</li>
+                                <li><strong>D6 (Interaction):</strong> supports interaction logic (finance constraints reshape aggregate risk).</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- TOPIC 5: Empirical anchors (macro-finance + banking + leverage) -->
+    <section class="topic" data-topic="t5">
+        <div class="topic-head">
+            <div>
+                <div class="topic-title"><span class="stripe t5"></span>Empirical Anchors & Validation Targets (Banking,
+                    Leverage, Transmission)</div>
+                <p class="topic-desc">
+                    This topic exists to discipline calibration and validate mechanisms: leverage is a state variable;
+                    bank constraints matter for credit supply.
+                </p>
+            </div>
+            <!-- Badge removed -->
+        </div>
+
+        <div class="papers">
+
+            <article class="paper-item" id="paper-garcia_posada_paz_2024_credit_supply"
+                data-tags="high t5 d1 d3 garcia-posada paz 2024 euro area credit supply monetary policy bank capital">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="garcia_posada_paz_2024_credit_supply" />
+                                    The Transmission of Monetary Policy to Credit Supply
+                                </p>
+                                <div class="meta">Miguel García-Posada, Peter Paz — 2024</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D1</span><span class="chip deliv">D3</span>
+                            </div>
+                        </div>
+                        <p class="desc">Uses ECB Bank Lending Survey microdata with high-frequency monetary shocks to identify how tightening propagates through bank credit standards. Finds stronger tightening by weakly capitalized banks, especially for SMEs—pinning down an empirically relevant bank-lending channel in the euro area.</p>
+                        <div class="actions">
+                            <a href="/literature/Finance_Intermediation/The Transmission of Monetary Policy to Credit Supply in the Euro Area.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>This paper provides euro-area micro evidence on the bank-lending channel by linking monetary policy surprises to banks’ credit standards (loan approval criteria) using confidential survey responses from the ECB Bank Lending Survey combined with bank balance-sheet information and high-frequency monetary policy shocks. The core identification idea is that high-frequency monetary surprises isolate exogenous policy movements around announcements, while the survey measures capture banks’ intended tightening/loosening of lending standards at a granular level (including loan types and borrower segments such as SMEs). The headline result is an interaction effect: following contractionary monetary surprises, poorly capitalized banks are significantly more likely to tighten credit standards—particularly for SME lending—implying that bank balance-sheet strength mediates transmission.</p>
+                            <p>For your thesis, the value is twofold. First, it gives credible empirical validation targets for any intermediary/bank block (e.g., sensitivity of credit supply to policy conditional on capitalization). Second, it supports the narrative that monetary tightening can produce nonlinear amplification through banking constraints—exactly the type of mechanism that may interact with climate disaster shocks (collateral losses, net worth erosion) and thereby magnify macro outcomes in bad states.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D1 (Targets):</strong> empirical targets for credit standards, bank capitalization interactions.</li>
+                                <li><strong>D3 (Discipline):</strong> discipline for the bank/intermediary block and credit-supply wedge.</li>
+                                <li><strong>D5 (Asymmetry):</strong> supports asymmetric/state-dependent transmission exercises.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-jst_2013_when_credit_bites_back"
+                data-tags="high t5 d1 d5 jorda schularick taylor 2013 when credit bites back leverage business cycles crises">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="jst_2013_when_credit_bites_back" />
+                                    When Credit Bites Back
+                                </p>
+                                <div class="meta">Òscar Jordà, Moritz Schularick, Alan M. Taylor — 2013</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D1</span><span class="chip deliv">D5</span>
+                            </div>
+                        </div>
+                        <p class="desc">Documents a robust macro-finance fact: credit-intensive expansions predict deeper recessions and slower recoveries. Using historical data across advanced economies, the paper elevates private leverage from “side variable” to a central state variable shaping downturn severity.</p>
+                        <div class="actions">
+                            <a href="/literature/Empirics/When Credit Bites Back- Leverage, Business Cycles, and Crises.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Jordà, Schularick, and Taylor establish one of the most influential empirical regularities in macro-finance: the build-up of private credit during expansions predicts the depth and persistence of subsequent recessions. The analysis draws on long-run historical data for advanced economies and systematically compares recession dynamics conditional on prior credit growth, distinguishing normal recessions from those associated with financial crises. Their central finding is not merely that crises are costly, but that the magnitude of costs is tightly linked to leverage accumulated in the preceding boom—credit booms “bite back.”</p>
+                            <p>For your thesis, this paper supplies the empirical rationale for treating financial conditions (leverage, spreads, intermediary net worth) as a state variable that governs macro responses—exactly the logic behind nonlinear amplification. It directly supports your design choice to run the same climate shock under different initial financial states (e.g., high leverage vs low leverage, tight vs loose bank constraints) and to report differences in output, inflation, spreads, and distributional outcomes. It also strengthens your motivation for policy evaluation under tail risk: if leverage changes the slope of the recovery path, then optimal monetary stabilization around disaster events can be meaningfully state-dependent.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D1 (Calibration):</strong> motivates leverage/spread moments and “initial-state” calibration.</li>
+                                <li><strong>D5 (Scenarios):</strong> justifies high- vs low-leverage scenario experiments and state dependence.</li>
+                                <li><strong>D6 (Interpretation):</strong> supports interpreting amplification as leverage-conditioned.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-ottonello_winberry_2018_investment_channel"
+                data-tags="supp t5 d1 d5 ottonello winberry 2018 financial heterogeneity investment channel monetary policy">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox"
+                                        data-key="ottonello_winberry_2018_investment_channel" />
+                                    Financial Heterogeneity and the Investment Channel
+                                </p>
+                                <div class="meta">Pablo Ottonello, Thomas Winberry — 2018</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip supp">SUPPORTING</span>
+                                <span class="chip deliv">D1</span><span class="chip deliv">D5</span>
+                            </div>
+                        </div>
+                        <p class="desc">Shows that firms’ financial risk heterogeneity shapes how investment responds to monetary policy. Empirically, safer (low-default-risk) firms react more to monetary shocks. A heterogeneous-firm NK model with default risk rationalizes these patterns and links distribution of risk to aggregate transmission.</p>
+                        <div class="actions">
+                            <a href="/literature/Empirics/Financial Heterogeneity and the Investment Channel of Monetary Policy.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Ottonello and Winberry study how monetary policy affects investment when firms differ in default risk and face financial frictions. Using micro data and identified monetary shocks, they document that low-default-risk firms—those with stronger balance sheets or greater “distance to default”—exhibit larger investment responses to monetary policy shocks than riskier firms. This empirical pattern is important because many reduced-form narratives would predict the opposite (that constrained/risky firms should be more sensitive).</p>
+                            <p>They interpret the evidence through a heterogeneous-firm New Keynesian model in which default risk and financing conditions generate cross-sectional differences in how interest-rate changes affect the cost of capital and investment decisions. A key takeaway is that aggregate transmission depends on the distribution of firm risk: monetary policy shifts composition effects (who adjusts investment) and therefore the mapping from a policy rate change to aggregate investment is not invariant across states or across economies.</p>
+                            <p>For your thesis, the paper is a strong empirical-and-structural anchor if you want investment and spreads to be central outcomes of “financial amplification.” It provides a disciplined template for (i) selecting validation moments (investment response by risk), and (ii) writing a decomposition narrative: disaster shocks can worsen balance sheets and shift the risk distribution, changing the investment channel of monetary policy even if the policy rule is unchanged.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D1 (Targets):</strong> targets for investment responses by risk buckets and spreads/default indicators.</li>
+                                <li><strong>D5 (Mechanism):</strong> mechanism for heterogeneous investment transmission under policy changes.</li>
+                                <li><strong>D6 (Decomposition):</strong> decomposition tool: amplification via risk distribution versus household MPCs.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-bianchi_melosi_2017_escaping"
+                data-tags="high t5 d5 bianchi melosi 2017 escaping the great recession nonlinear policy uncertainty regime switching">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox" data-key="bianchi_melosi_2017_escaping" />
+                                    Escaping the Great Recession
+                                </p>
+                                <div class="meta">Francesco Bianchi, Leonardo Melosi — 2017</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip high">HIGH</span>
+                                <span class="chip deliv">D5</span>
+                            </div>
+                        </div>
+                        <p class="desc">Explains puzzling Great Recession dynamics at the zero lower bound by emphasizing policy trade-offs and uncertainty over future regimes. Shows that when policy is constrained, expectations about future policy generate macro outcomes that differ sharply from linear NK intuition—making state-dependent policy evaluation essential.</p>
+                        <div class="actions">
+                            <a href="/literature/Empirics/Escaping the Great Recession.pdf" target="_blank"
+                                class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Bianchi and Melosi analyze why the post-crisis macro environment did not behave as some standard linear New Keynesian predictions would suggest once interest rates approached the zero lower bound (ZLB). Their contribution is to model policy as a regime-dependent process where constraints and changing policy objectives create policy trade-offs and, crucially, policy uncertainty: agents’ expectations about how policy will behave in the future influence current inflation and output dynamics.</p>
+                            <p>The paper’s central value for your thesis is not that you must implement a full ZLB block, but that it provides a top-tier reference for why nonlinearities and regime dependence matter when the economy is hit by extreme shocks or tail risk. Climate disasters and disaster risk can create similar “bad-state” conditions—sharp movements in inflation/output trade-offs, large risk premia/spreads, and changed expectations about stabilization priorities. The paper offers language and logic for arguing that policy evaluation based only on local linearization can be unreliable in such environments.</p>
+                            <p>In your deliverables, this paper helps justify designing experiments where the same climate shock is evaluated under different states (e.g., high leverage, low bank net worth) and potentially under alternative policy-rule regimes. It strengthens the methodological framing for your Results section: “bad states are not scaled-up normal times.”</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D5 (Nonlinear policy):</strong> canonical reference for nonlinear/state-dependent policy analysis.</li>
+                                <li><strong>D0/D2 (Rational):</strong> supports why linear benchmarks can mislead under constraints/tail events.</li>
+                                <li><strong>D6 (Expectations):</strong> motivates interpreting amplification through expectations and regimes.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- TOPIC 6: Optional extensions (asset pricing, uncertainty, ML-finance) -->
+    <section class="topic" data-topic="t6">
+        <div class="topic-head">
+            <div>
+                <div class="topic-title"><span class="stripe t6"></span>Optional Extensions (Asset Pricing / Uncertainty
+                    / Finance Appendix)</div>
+                <p class="topic-desc">
+                    Include only if your core model is stable and your baseline results are written. These papers are
+                    valuable but can create scope creep.
+                </p>
+            </div>
+            <!-- Badge removed -->
+        </div>
+
+        <div class="papers">
+
+            <article class="paper-item" id="paper-chen_pelger_zhu_2021_dl_asset_pricing"
+                data-tags="opt t6 d7 chen pelger zhu 2021 deep learning in asset pricing sdf no-arbitrage">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox"
+                                        data-key="chen_pelger_zhu_2021_dl_asset_pricing" />
+                                    Deep Learning in Asset Pricing
+                                </p>
+                                <div class="meta">Luyang Chen, Markus Pelger, Jason Zhu — 2021</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip opt">OPTIONAL</span>
+                                <span class="chip deliv">D7</span>
+                            </div>
+                        </div>
+                        <p class="desc">Estimates a flexible, nonlinear stochastic discount factor with deep neural networks using rich macro and firm-level information while enforcing no-arbitrage moment conditions. Introduces adversarial construction of test assets and data-driven state extraction, delivering strong out-of-sample pricing and portfolio performance.</p>
+                        <div class="actions">
+                            <a href="/literature/Methods/Deep Learning in Asset Pricing.pdf" target="_blank"
+                                class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Chen, Pelger, and Zhu propose a deep learning approach to estimating a nonlinear stochastic discount factor (SDF) that prices the cross-section of stock returns using a large set of conditioning information. Their key methodological move is to embed no-arbitrage restrictions directly into the learning problem: instead of fitting expected returns ad hoc, they use conditional moment restrictions implied by no-arbitrage as the criterion. To improve identification and avoid weak-signal problems in returns, they introduce an adversarial procedure that constructs informative test assets and a mechanism to extract macroeconomic “states” from many time series, enabling time-variation and high-dimensional conditioning.</p>
+                            <p>For your thesis, this paper is best treated as an optional finance appendix rather than core: it provides a credible empirical template if you want to compare your model-implied risk premia (or a disaster-risk premium channel) with an ML-based SDF estimated from data. It can also inform how you talk about “big data + structural restrictions”: your main thesis uses structural macro restrictions; this paper shows the analogous logic on the asset-pricing side. If time permits, you could use their framing to motivate why a neural surrogate can respect economic structure (no-arbitrage constraints) rather than acting as a pure black box.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D7 (Finance layer):</strong> empirical “finance layer” to benchmark risk-premium/SDF implications. Helps position your thesis at the macro–finance–ML intersection without changing your structural core.</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="paper-item" id="paper-ilut_luetticke_schneider_2025_uncertainty"
+                data-tags="opt t6 d5 d7 ilut luetticke schneider 2025 uncertainty ambiguity hank asset premia">
+                <div class="flipper">
+                    <div class="front">
+                        <div class="paper-head">
+                            <div>
+                                <p class="paper-title">
+                                    <input class="cb" type="checkbox"
+                                        data-key="ilut_luetticke_schneider_2025_uncertainty" />
+                                    HANK’s Response to Aggregate Uncertainty
+                                </p>
+                                <div class="meta">Cosmin Ilut, Ralph Luetticke, Martin Schneider — 2025</div>
+                            </div>
+                            <div class="chips">
+                                <span class="chip opt">OPTIONAL</span>
+                                <span class="chip deliv">D5</span><span class="chip deliv">D7</span>
+                            </div>
+                        </div>
+                        <p class="desc">Builds and estimates a HANK model where aggregate uncertainty is modeled as ambiguity (multiple priors), giving first-order effects on steady state and dynamics. Combined with portfolio frictions, uncertainty shocks generate sizable premia and explain much macro comovement—linking HANK to asset pricing.</p>
+                        <div class="actions">
+                            <a href="/literature/Methods/HANK’s Response to Aggregate Uncertainty in an Estimated Business Cycle Model.pdf"
+                                target="_blank" class="btn btn-primary"><i class="ph ph-file-pdf"></i> Read Paper</a>
+                            <button class="btn btn-glass" onclick="scheduleReview(this)" title="Schedule Review" style="margin-right:8px;"><i class="ph ph-calendar-plus"></i> Schedule</button>
+                            <button class="btn btn-glass btn-flip"><i class="ph ph-arrows-clockwise"></i>
+                                Summary</button>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="abstract-text">
+                            <div class="abstract-title">Explanation</div>
+                            <p>Ilut, Luetticke, and Schneider develop an estimated HANK framework in which households respond not only to idiosyncratic risk but also to aggregate uncertainty, modeled as ambiguity via multiple-priors preferences. This modeling choice is consequential: ambiguity can affect utility at first order, so aggregate uncertainty shows up directly in the steady state and linearized dynamics, making the model more tractable for computation and estimation than many alternative uncertainty setups. They combine this with portfolio frictions in a multi-asset environment, and show that uncertainty shocks can generate a sizeable capital premium and account for a large share of cyclical comovement in macro aggregates.</p>
+                            <p>For your thesis, the optional value is clear: climate “rare disaster risk” is conceptually close to an aggregate tail-risk/uncertainty channel. This paper gives you (i) a blueprint for how to connect uncertainty shocks to asset premia in a HANK setting, and (ii) a tractable estimation mindset (steady state + linear dynamics) that can complement your D7 neural surrogate or limited-estimation plan. If you include a robustness exercise, you can benchmark climate-disaster risk shocks against a more generic aggregate-uncertainty shock to show what is truly “climate-specific” in your amplification results.</p>
+                            <div class="abstract-title" style="margin-top:15px;">Relevance</div>
+                            <ul style="padding-left: 20px; margin: 0;">
+                                <li><strong>D7 (Estimation):</strong> blueprint for estimation-friendly HANK with uncertainty and premia.</li>
+                                <li><strong>D5 (Benchmark):</strong> alternative “risk shock” benchmark versus climate-disaster risk.</li>
+                                <li><strong>Note:</strong> Useful narrative link between tail risk and macro-finance objects (premia, comovement).</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-glass btn-flip-back">Back to details</button>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/reading_list.js') }}"></script>
+{% endblock %}
