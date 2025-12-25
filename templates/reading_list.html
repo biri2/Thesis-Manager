@@ -56,6 +56,392 @@
     </div>
 </section>
 
+<section class="card" style="margin-bottom: 40px; padding: 0; overflow: hidden;">
+    <div style="padding: 24px 24px 0 24px; display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h2 style="margin: 0 0 8px 0; font-size: 1.5rem;">Literature Mapping & Thesis Deliverables</h2>
+            <p style="color: var(--text-muted); margin-bottom: 24px;">A structured overview of core references, their priority level, and their specific mapping to thesis deliverables (D0–D7).</p>
+        </div>
+        <button class="btn btn-glass" onclick="toggleLiteratureTable()" id="literature-toggle-btn">
+            <i class="ph ph-caret-down"></i>
+            <span>Show</span>
+        </button>
+    </div>
+    <div class="table-wrap" id="literature-table-container" style="transition: max-height 0.4s ease-out; max-height: 0px; overflow: hidden;">
+        <style>
+            .reading-matrix-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.85rem;
+            }
+            .reading-matrix-table th, 
+            .reading-matrix-table td {
+                padding: 16px;
+                text-align: left;
+                border-bottom: 1px solid var(--card-border);
+                vertical-align: top;
+            }
+            .reading-matrix-table th {
+                background: rgba(255, 255, 255, 0.03);
+                color: var(--text-muted);
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                font-size: 0.7rem;
+            }
+            .reading-matrix-table td:nth-child(1) { width: 20%; font-weight: 700; color: var(--accent-models); font-size: 1rem; line-height: 1.3; }
+            .reading-matrix-table td:nth-child(2) { width: 22%; font-weight: 700; color: var(--text-main); }
+            .reading-matrix-table td:nth-child(3) { width: 23%; color: var(--text-muted); }
+            .reading-matrix-table td:nth-child(4) { width: 10%; }
+            .reading-matrix-table td:nth-child(5) { width: 12%; font-weight: 800; }
+            .reading-matrix-table td:nth-child(6) { width: 13%; font-family: var(--font-mono); color: var(--accent-primary); }
+            .reading-matrix-table td:nth-child(7) { display: none; } /* Hidden, shown on hover */
+            
+            .prio-CORE { color: var(--core); }
+            .prio-HIGH { color: var(--high); }
+            .prio-SUPP { color: var(--supp); }
+            .prio-OPTIONAL { color: var(--opt); }
+
+            .reading-matrix-table tbody tr {
+                transition: background 0.2s ease;
+            }
+            .reading-matrix-table tbody tr:hover {
+                background: rgba(255, 255, 255, 0.05);
+            }
+            .paper-link {
+                color: var(--accent-primary);
+                text-decoration: none;
+                transition: opacity 0.2s;
+            }
+            .paper-link:hover {
+                text-decoration: underline;
+                opacity: 0.8;
+            }
+
+            @keyframes shine-highlight {
+                0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); transform: scale(1); }
+                30% { box-shadow: 0 0 40px 10px rgba(59, 130, 246, 0.5); transform: scale(1.03); }
+                100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); transform: scale(1); }
+            }
+            .highlight-shine {
+                animation: shine-highlight 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+                border-color: var(--accent-primary) !important;
+                z-index: 100;
+                position: relative;
+            }
+
+            /* Custom Scrollbar for the table slider */
+            .table-slider {
+                overflow-x: auto !important;
+                width: 100% !important;
+                display: block !important;
+                scrollbar-width: thin;
+                scrollbar-color: var(--accent-primary) rgba(255, 255, 255, 0.05);
+                padding-bottom: 12px; /* Space for the scrollbar */
+            }
+            .table-slider::-webkit-scrollbar {
+                height: 8px;
+            }
+            .table-slider::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.02);
+                border-radius: 10px;
+            }
+            .table-slider::-webkit-scrollbar-thumb {
+                background: var(--accent-primary);
+                border-radius: 10px;
+                border: 2px solid transparent;
+                background-clip: content-box;
+            }
+
+            /* Floating Description Pane */
+            .floating-desc {
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                width: 400px;
+                background: rgba(15, 23, 42, 0.95);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid var(--accent-primary);
+                border-radius: 16px;
+                padding: 20px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+                z-index: 2000;
+                transform: translateY(20px);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                pointer-events: none;
+            }
+            .floating-desc.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            .floating-desc h4 {
+                margin: 0 0 10px 0;
+                color: var(--accent-primary);
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+            .floating-desc p {
+                margin: 0;
+                font-size: 0.9rem;
+                line-height: 1.5;
+                color: var(--text-main);
+            }
+        </style>
+        <div class="table-slider">
+            <table class="reading-matrix-table" style="width: 100%; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th>Topic</th>
+                    <th>Paper</th>
+                    <th>Authors</th>
+                    <th>Year</th>
+                    <th>Priority</th>
+                    <th>Deliverables</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>HANK Foundations & Monetary Transmission</td>
+                    <td><a href="#paper-kaplan_weidner_violante_2014" class="paper-link">The Wealthy Hand-to-Mouth</a></td>
+                    <td>Greg Kaplan, Giovanni L. Violante, Justin Weidner</td>
+                    <td>2014</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D1</td>
+                    <td>This paper documents that many households with substantial net worth still behave “hand-to-mouth” because wealth is illiquid. The liquid/illiquid asset split generates high MPCs even among asset holders and reshapes how fiscal and monetary policies transmit in HANK models.</td>
+                </tr>
+                <tr>
+                    <td>HANK Foundations & Monetary Transmission</td>
+                    <td><a href="#paper-kaplan_moll_violante_2018" class="paper-link">Monetary Policy According to HANK</a></td>
+                    <td>Greg Kaplan, Benjamin Moll, Giovanni L. Violante</td>
+                    <td>2018</td>
+                    <td class="prio-CORE">CORE</td>
+                    <td>D0, D1, D2, D6</td>
+                    <td>This paper establishes the core HANK view of monetary transmission: heterogeneity and incomplete markets imply that policy works mainly through income, redistribution, and general-equilibrium effects, not the representative-agent intertemporal substitution channel. It rationalizes large MPCs and realistic wealth distributions.</td>
+                </tr>
+                <tr>
+                    <td>HANK Foundations & Monetary Transmission</td>
+                    <td><a href="#paper-auclert_2019_redistribution" class="paper-link">Monetary Policy and the Redistribution Channel</a></td>
+                    <td>Adrien Auclert</td>
+                    <td>2019</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D0, D2, D6</td>
+                    <td>Develops a decomposition of monetary transmission into redistribution components (interest rate exposure, earnings heterogeneity, etc.), clarifying when and why distributional shifts amplify or dampen aggregate demand responses in HANK environments.</td>
+                </tr>
+                <tr>
+                    <td>Methods Spine: Nonlinear Solution, Sequence-Space, and Estimation</td>
+                    <td><a href="#paper-fernandez_guerron_2020" class="paper-link">Estimating DSGE Models: Recent Advances</a></td>
+                    <td>Jesús Fernández-Villaverde, Pablo Guerrón-Quintana</td>
+                    <td>2020</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D1, D7</td>
+                    <td>A high-level but concrete map of modern DSGE estimation (Bayesian methods, particle filters, nonlinearities, identification). Useful for framing what is feasible (and what is not) when moving from solving to estimating nonlinear heterogeneous-agent models.</td>
+                </tr>
+                <tr>
+                    <td>Methods Spine: Nonlinear Solution, Sequence-Space, and Estimation</td>
+                    <td><a href="#paper-maliar_winant_2021" class="paper-link">Deep Learning for Solving Dynamic Economic Models</a></td>
+                    <td>Lilia Maliar, Serguei Maliar, Pablo Winant</td>
+                    <td>2021</td>
+                    <td class="prio-SUPP">SUPP</td>
+                    <td>D7</td>
+                    <td>A practical guide to implementing deep learning solution methods for dynamic models, emphasizing training design, stability, and evaluation of approximation error for global solutions in higher dimensions.</td>
+                </tr>
+                <tr>
+                    <td>Methods Spine: Nonlinear Solution, Sequence-Space, and Estimation</td>
+                    <td><a href="#paper-auclert_rognlie_straub_2021" class="paper-link">Using the Sequence-Space Jacobian to Solve and Estimate Heterogeneous-Agents Models</a></td>
+                    <td>Adrien Auclert, Bence Bardóczy, Matthew Rognlie, Ludwig Straub</td>
+                    <td>2021</td>
+                    <td class="prio-CORE">CORE</td>
+                    <td>D2</td>
+                    <td>Introduces the sequence-space Jacobian approach: efficient computation of general-equilibrium impulse responses in HANK by treating the model as a mapping from sequences to sequences and exploiting sparse derivatives.</td>
+                </tr>
+                <tr>
+                    <td>Methods Spine: Nonlinear Solution, Sequence-Space, and Estimation</td>
+                    <td><a href="#paper-boehl_2023_speed" class="paper-link">HANK on Speed: Robust Nonlinear Solutions using AD</a></td>
+                    <td>Gregor Boehl</td>
+                    <td>2024</td>
+                    <td class="prio-CORE">CORE</td>
+                    <td>D2, D5</td>
+                    <td>A practical paper on solving nonlinear HANK models fast and robustly using automatic differentiation and sequence-space Newton methods. It emphasizes implementation details, convergence diagnostics, and computational design choices that make large-shock transition dynamics feasible and reproducible.</td>
+                </tr>
+                <tr>
+                    <td>Methods Spine: Nonlinear Solution, Sequence-Space, and Estimation</td>
+                    <td><a href="#paper-kase_melosi_rottner_2022" class="paper-link">Estimating Nonlinear Heterogeneous Agent Models with Neural Networks</a></td>
+                    <td>Hanno Kase, Leonardo Melosi, Matthias Rottner</td>
+                    <td>2025</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D7</td>
+                    <td>Proposes neural network surrogates / emulators for nonlinear heterogeneous-agent models to accelerate estimation and likelihood-based procedures, enabling richer nonlinear inference than standard local approximations.</td>
+                </tr>
+                <tr>
+                    <td>Methods Spine: Nonlinear Solution, Sequence-Space, and Estimation</td>
+                    <td><a href="#paper-fernandez_villaverde_2023_dl_survey" class="paper-link">Deep Learning for Solving Economic Models</a></td>
+                    <td>Jesús Fernández-Villaverde</td>
+                    <td>2025</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D7</td>
+                    <td>A survey and methodological guide on using deep neural networks to solve DSGE and related macro models globally. It explains why deep learning can mitigate the curse of dimensionality, outlines training strategies, and emphasizes diagnostics and error measurement.</td>
+                </tr>
+                <tr>
+                    <td>Climate Tail Risk, Rare Disasters & Monetary Policy Trade-offs</td>
+                    <td><a href="#paper-fernandez_levintal_2018" class="paper-link">Solution Methods for Models with Rare Disasters</a></td>
+                    <td>Jesús Fernández-Villaverde, Oscar Levintal</td>
+                    <td>2018</td>
+                    <td class="prio-SUPP">SUPP</td>
+                    <td>D4, D5</td>
+                    <td>Surveys and demonstrates numerical solution strategies for models with rare disasters, emphasizing why standard perturbation/local methods can fail and how to compute global objects reliably when tail events matter.</td>
+                </tr>
+                <tr>
+                    <td>Climate Tail Risk, Rare Disasters & Monetary Policy Trade-offs</td>
+                    <td><a href="#paper-dell_jones_olken_2012" class="paper-link">Temperature Shocks and Economic Growth</a></td>
+                    <td>Melissa Dell, Benjamin F. Jones, Benjamin A. Olken</td>
+                    <td>2012</td>
+                    <td class="prio-SUPP">SUPP</td>
+                    <td>D1</td>
+                    <td>Provides panel evidence that temperature shocks affect output growth (with heterogeneous effects), offering a broad empirical anchor that climate variables have macroeconomic consequences with persistence.</td>
+                </tr>
+                <tr>
+                    <td>Climate Tail Risk, Rare Disasters & Monetary Policy Trade-offs</td>
+                    <td><a href="#paper-cantelmo_2022_disasters" class="paper-link">Rare Disasters, the Natural Interest Rate and Monetary Policy</a></td>
+                    <td>Francesco Cantelmo</td>
+                    <td>2022</td>
+                    <td class="prio-SUPP">SUPP</td>
+                    <td>D4, D5</td>
+                    <td>Studies how disaster risk affects the natural rate and optimal monetary policy trade-offs, highlighting that changes in perceived tail risk can shift steady states and policy-relevant dynamics even when disasters rarely realize.</td>
+                </tr>
+                <tr>
+                    <td>Climate Tail Risk, Rare Disasters & Monetary Policy Trade-offs</td>
+                    <td><a href="#paper-kara_thakoor_2023_climate" class="paper-link">Monetary Policy Design with Recurrent Climate Shocks</a></td>
+                    <td>Gazi Kara, Arvind Thakoor</td>
+                    <td>2023</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D4, D5</td>
+                    <td>An NK-style framework where climate shocks behave like persistent supply disturbances, creating stabilization trade-offs and motivating monetary-policy design in environments with recurrent climate-related disruptions.</td>
+                </tr>
+                <tr>
+                    <td>Climate Tail Risk, Rare Disasters & Monetary Policy Trade-offs</td>
+                    <td><a href="#paper-bilal_kanzig_2024_impact" class="paper-link">The Macroeconomic Impact of Climate Change</a></td>
+                    <td>Adrien Bilal, Diego R. Känzig</td>
+                    <td>2025</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D4</td>
+                    <td>Empirical evidence on macro effects of climate change/shocks (and their transmission), providing quantitative discipline for the size/persistence of damages and a bridge from climate data to macro aggregates.</td>
+                </tr>
+                <tr>
+                    <td>Financial Intermediation, Spreads & Macro-Finance Amplification</td>
+                    <td><a href="#paper-kiyotaki_moore_1997" class="paper-link">Credit Cycles</a></td>
+                    <td>Nobuhiro Kiyotaki, John Moore</td>
+                    <td>1997</td>
+                    <td class="prio-SUPP">SUPP</td>
+                    <td>D3</td>
+                    <td>Classic collateral/credit-cycle mechanism: balance-sheet constraints generate amplification and persistence, with feedback from asset prices/collateral values to borrowing capacity and real activity.</td>
+                </tr>
+                <tr>
+                    <td>Financial Intermediation, Spreads & Macro-Finance Amplification</td>
+                    <td><a href="#paper-bernanke_gertler_gilchrist_1999" class="paper-link">The Financial Accelerator</a></td>
+                    <td>Ben Bernanke, Mark Gertler, Simon Gilchrist</td>
+                    <td>1999</td>
+                    <td class="prio-SUPP">SUPP</td>
+                    <td>D3</td>
+                    <td>Introduces the external finance premium mechanism: borrower net worth affects spreads/financing costs, amplifying shocks through balance sheets and investment dynamics.</td>
+                </tr>
+                <tr>
+                    <td>Financial Intermediation, Spreads & Macro-Finance Amplification</td>
+                    <td><a href="#paper-gertler_kiyotaki_2010" class="paper-link">Financial Intermediation and Credit Policy</a></td>
+                    <td>Mark Gertler, Nobuhiro Kiyotaki</td>
+                    <td>2010</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D3</td>
+                    <td>Builds a macro model with financial intermediaries and occasionally binding constraints, clarifying how credit policy and intermediary balance sheets shape business-cycle dynamics.</td>
+                </tr>
+                <tr>
+                    <td>Financial Intermediation, Spreads & Macro-Finance Amplification</td>
+                    <td><a href="#paper-gertler_karadi_2011" class="paper-link">A Model of Unconventional Monetary Policy</a></td>
+                    <td>Mark Gertler, Peter Karadi</td>
+                    <td>2011</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D3, D5</td>
+                    <td>A leading template for incorporating banks and spreads into NK DSGE: intermediary net worth constraints generate endogenous spreads and make QE/credit policy relevant for transmission.</td>
+                </tr>
+                <tr>
+                    <td>Financial Intermediation, Spreads & Macro-Finance Amplification</td>
+                    <td><a href="#paper-brunnermeier_sannikov_2014" class="paper-link">A Macroeconomic Model with a Financial Sector</a></td>
+                    <td>Markus Brunnermeier, Yuliy Sannikov</td>
+                    <td>2014</td>
+                    <td class="prio-SUPP">SUPP</td>
+                    <td>D5</td>
+                    <td>A nonlinear macro-finance model where “experts” (financial intermediaries) absorb risk but are constrained by net worth. Endogenous risk rises in bad times; crises are not scaled-up recessions. The model delivers strong state dependence and crisis amplification.</td>
+                </tr>
+                <tr>
+                    <td>Financial Intermediation, Spreads & Macro-Finance Amplification</td>
+                    <td><a href="#paper-fernandez_villaverde_2023_wealth" class="paper-link">Financial Frictions and the Wealth Distribution</a></td>
+                    <td>Jesús Fernández-Villaverde, Pablo Hurtado, Galo Nuño</td>
+                    <td>2023</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D3, D6</td>
+                    <td>Connects household heterogeneity with financial frictions: intermediary constraints and distributional dynamics interact, generating state dependence and endogenous aggregate risk with implications for inequality and transmission.</td>
+                </tr>
+                <tr>
+                    <td>Empirical Anchors & Validation Targets (Banking, Leverage, Transmission)</td>
+                    <td><a href="#paper-jorda_schularick_taylor_2013" class="paper-link">When Credit Bites Back</a></td>
+                    <td>Òscar Jordà, Moritz Schularick, Alan M. Taylor</td>
+                    <td>2013</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D1</td>
+                    <td>Uses long-run historical evidence to show that leverage buildups predict deeper recessions and slower recoveries, motivating leverage/net-worth as key state variables for validation targets.</td>
+                </tr>
+                <tr>
+                    <td>Empirical Anchors & Validation Targets (Banking, Leverage, Transmission)</td>
+                    <td><a href="#paper-ottonello_winberry_2020_investment" class="paper-link">Financial Heterogeneity and the Investment Channel of Monetary Policy</a></td>
+                    <td>Pablo Ottonello, Thomas Winberry</td>
+                    <td>2018</td>
+                    <td class="prio-SUPP">SUPP</td>
+                    <td>D1, D6</td>
+                    <td>Shows that monetary policy effects on investment depend on firm-level/financial risk exposure, providing empirical discipline for heterogeneity in transmission through balance sheets.</td>
+                </tr>
+                <tr>
+                    <td>Empirical Anchors & Validation Targets (Banking, Leverage, Transmission)</td>
+                    <td><a href="#paper-garcia_posada_paz_2024" class="paper-link">The Transmission of Monetary Policy to Credit Supply</a></td>
+                    <td>Miguel García-Posada, Ana Paz</td>
+                    <td>2024</td>
+                    <td class="prio-HIGH">HIGH</td>
+                    <td>D1, D3</td>
+                    <td>Euro-area evidence that contractionary monetary shocks tighten bank credit supply, especially for weaker-capitalized banks—useful calibration/validation targets for bank-capital and credit-supply channels.</td>
+                </tr>
+                <tr>
+                    <td>Optional Extensions (Asset Pricing / Uncertainty / Finance Appendix)</td>
+                    <td><a href="#paper-chen_pelger_zhu_2021_dl_asset_pricing" class="paper-link">Deep Learning in Asset Pricing</a></td>
+                    <td>Luyang Chen, Markus Pelger, Jason Zhu</td>
+                    <td>2021</td>
+                    <td class="prio-OPTIONAL">OPTIONAL</td>
+                    <td>D7</td>
+                    <td>Estimates a flexible, nonlinear stochastic discount factor with deep neural networks using rich macro and firm-level information while enforcing no-arbitrage moment conditions. Introduces adversarial construction of test assets and data-driven state extraction, delivering strong out-of-sample pricing and portfolio performance.</td>
+                </tr>
+                <tr>
+                    <td>Optional Extensions (Asset Pricing / Uncertainty / Finance Appendix)</td>
+                    <td><a href="#paper-ilut_luetticke_schneider_2025_uncertainty" class="paper-link">HANK’s Response to Aggregate Uncertainty</a></td>
+                    <td>Cosmin Ilut, Ralph Luetticke, Martin Schneider</td>
+                    <td>2025</td>
+                    <td class="prio-OPTIONAL">OPTIONAL</td>
+                    <td>D5, D7</td>
+                    <td>Builds and estimates a HANK model where aggregate uncertainty is modeled as ambiguity (multiple priors), giving first-order effects on steady state and dynamics. Combined with portfolio frictions, uncertainty shocks generate sizable premia and explain much macro comovement—linking HANK to asset pricing.</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Floating Description Pane -->
+<div id="floating-desc" class="floating-desc">
+    <h4>Paper Summary</h4>
+    <p id="floating-desc-content"></p>
+</div>
+
 <div class="grid" style="grid-template-columns: 1fr;">
     <!-- Deliverables legend -->
     <section class="deliverables">
@@ -1292,6 +1678,90 @@
     </section>
 
 </div>
+
+<script>
+    function toggleLiteratureTable() {
+        const container = document.getElementById('literature-table-container');
+        const btn = document.getElementById('literature-toggle-btn');
+        const icon = btn.querySelector('i');
+        const text = btn.querySelector('span');
+
+        if (container.style.maxHeight === '0px' || !container.style.maxHeight) {
+            container.style.maxHeight = '5000px';
+            // Wait for transition to start or just set it
+            container.style.overflow = 'visible'; 
+            icon.className = 'ph ph-caret-up';
+            text.innerText = 'Hide';
+        } else {
+            container.style.maxHeight = '0px';
+            container.style.overflow = 'hidden'; 
+            icon.className = 'ph ph-caret-down';
+            text.innerText = 'Show';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const table = document.querySelector('.reading-matrix-table');
+        if (!table) return;
+
+        const rows = table.querySelectorAll('tbody tr');
+        let lastTopicCell = null;
+        let rowspan = 1;
+
+        rows.forEach((row, index) => {
+            const firstCell = row.cells[0];
+            
+            if (lastTopicCell && firstCell.innerText === lastTopicCell.innerText) {
+                rowspan++;
+                lastTopicCell.rowSpan = rowspan;
+                firstCell.style.display = 'none';
+            } else {
+                lastTopicCell = firstCell;
+                rowspan = 1;
+            }
+        });
+
+        // Add shine effect on click
+        document.querySelectorAll('.paper-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    // Find the flipper or card inside
+                    const card = targetElement.querySelector('.front') || targetElement;
+                    
+                    card.classList.remove('highlight-shine');
+                    void card.offsetWidth; // Trigger reflow
+                    card.classList.add('highlight-shine');
+                    
+                    setTimeout(() => {
+                        card.classList.remove('highlight-shine');
+                    }, 2000);
+                }
+            });
+        });
+
+        // Hover effect for descriptions
+        const floatingDesc = document.getElementById('floating-desc');
+        const floatingDescContent = document.getElementById('floating-desc-content');
+        const tableRows = document.querySelectorAll('.reading-matrix-table tbody tr');
+
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                // The description is in the 7th cell (index 6)
+                const desc = this.cells[this.cells.length - 1].innerText;
+                const paperName = this.cells[1].innerText;
+                
+                floatingDescContent.innerHTML = `<strong>${paperName}:</strong> ${desc}`;
+                floatingDesc.classList.add('active');
+            });
+
+            row.addEventListener('mouseleave', function() {
+                floatingDesc.classList.remove('active');
+            });
+        });
+    });
+</script>
 
 <script src="{{ url_for('static', filename='js/reading_list.js') }}"></script>
 {% endblock %}
