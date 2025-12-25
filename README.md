@@ -3,7 +3,7 @@
 Thesis Manager is a lightweight organisational and conceptual tool designed to support the management of a Master's thesis in macroeconomics. It centralises literature tracking, progress monitoring and formal model definitions for projects involving heterogeneous-agent DSGE frameworks, monetary policy and non-linear risk. The tool is intentionally separate from numerical analysis and code execution; all economic modelling, estimation and simulation are carried out externally. Instead, Thesis Manager serves as a structured intellectual workspace, ensuring consistency between theory, references, deliverables and model architecture throughout the research process, from the initial design stage to the final writing stage.
 
 > [!IMPORTANT]
-> This repository contains the **interactive management UI**. The scientific simulation engines (Python/Julia/MATLAB) are typically integrated as external submodules or sibling repositories.
+> This repository contains the **interactive management UI**. The scientific simulation engines (Python/MATLAB) are typically integrated as external submodules or sibling repositories.
 
 > [!NOTE] > **Status**: Ready for research usage. Documentation is continuously updated.
 
